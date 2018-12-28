@@ -1,7 +1,7 @@
 # CommandBus Symfony Bundle
 
 This package is ready to development for CQRS and DDD. 
-Package prepared for english-platform project.
+Package prepared for [english-platform](https://github.com/ferdyrurka/english-platform) project.
 
 ## Documentation
 
