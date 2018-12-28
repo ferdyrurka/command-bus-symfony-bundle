@@ -1,0 +1,33 @@
+{
+  "name": "ferdyrurka/command-bus-symfony-bundle",
+  "type": "library",
+  "version": "0.0.1-alpha",
+  "description": "This package is ready to development for CQRS and DDD. Package prepared for english-platform project.",
+  "authors": [
+    {
+      "name": "Łukasz Staniszewski",
+      "email": "kontakt@lukaszstaniszewski.pl",
+      "homepage": "http://lukaszstaniszewski.pl"
+    }
+  ],
+  "license": "Open GPL v3 or later",
+  "require": {
+    "php": "7.3",
+    "symfony/dependency-injection": "4.2.*",
+    "elasticsearch/elasticsearch": "6.0.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "7.5.*",
+    "mockery/mockery": "1.2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ferdyrurka\\CommandBus\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ferdyrurka\\Test\\CommandBus\\": "tests/"
+    }
+  }
+}
