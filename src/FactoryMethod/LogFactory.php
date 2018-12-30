@@ -15,17 +15,36 @@ use Ferdyrurka\CommandBus\Repository\RepositoryInterface;
 use Ferdyrurka\CommandBus\Repository\ElasticSearchRepositoryInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Class LogFactory
+ * @package Ferdyrurka\CommandBus\FactoryMethod
+ */
 class LogFactory
 {
+    /**
+     *
+     */
     public const ELASTIC_SEARCH = 0;
 
+    /**
+     * @var ContainerInterface
+     */
     private $container;
 
+    /**
+     * LogFactory constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param int $type
+     * @return RepositoryInterface
+     * @throws LogFactoryException
+     */
     public function getRepository(int $type): RepositoryInterface
     {
         if ($type === self::ELASTIC_SEARCH) {
