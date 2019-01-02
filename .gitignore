@@ -4,3 +4,8 @@ composer.lock
 # Files
 
 phpunit.xml
+
+# IDE
+
+.idea
+.vscode
