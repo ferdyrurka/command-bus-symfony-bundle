@@ -12,10 +12,10 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus\Exception;
 
 /**
- * Class ConfNotFoundException
+ * Class InvalidArgsConfException
  * @package Ferdyrurka\CommandBus\Exception
  */
-class ConfNotFoundException extends FerdyrurkaCommandBusException
+class InvalidArgsConfException extends FerdyrurkaCommandBusException
 {
 
 }
