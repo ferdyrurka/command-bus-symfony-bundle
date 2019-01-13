@@ -15,13 +15,23 @@ use Ferdyrurka\CommandBus\DependencyInjection\CommandBusSymfonyExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * Class CommandBusSymfonyBundle
+ * @package Ferdyrurka\CommandBus
+ */
 final class CommandBusSymfonyBundle extends Bundle
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
     }
 
+    /**
+     * @return CommandBusSymfonyExtension
+     */
     public function getContainerExtension(): CommandBusSymfonyExtension
     {
         return new CommandBusSymfonyExtension();
