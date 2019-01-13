@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\Test\CommandBus\FactoryMethod;
+namespace Ferdyrurka\CommandBus\Test\FactoryMethod;
 
+use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\Exception\LogFactoryException;
 use Ferdyrurka\CommandBus\FactoryMethod\LogFactory;
-use Ferdyrurka\CommandBus\Repository\ElasticSearchRepositoryInterface;
 use Ferdyrurka\CommandBus\Repository\RepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
@@ -25,16 +25,15 @@ use Psr\Container\ContainerInterface;
  */
 class LogFactoryTest extends TestCase
 {
-
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     /**
-     * @var
+     * @var LogFactory
      */
     private $logFactory;
 
     /**
-     * @var
+     * @var ContainerInterface
      */
     private $container;
 
@@ -58,7 +57,7 @@ class LogFactoryTest extends TestCase
 
         $this->container->shouldReceive('get')->once()->andReturn($repositoryInterface);
 
-        $this->logFactory->getRepository(LogFactory::ELASTIC_SEARCH);
+        $this->logFactory->getRepository(ElasticSearchDatabase::DATABASE_NAME);
     }
 
     /**
@@ -67,7 +66,7 @@ class LogFactoryTest extends TestCase
     public function testRepositoryNotFound(): void
     {
         $this->expectException(LogFactoryException::class);
-        $this->logFactory->getRepository(2);
+        $this->logFactory->getRepository('failed');
     }
 }
 

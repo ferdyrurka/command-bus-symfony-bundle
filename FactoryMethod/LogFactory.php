@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\FactoryMethod;
 
+use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\Exception\LogFactoryException;
 use Ferdyrurka\CommandBus\Repository\RepositoryInterface;
 use Ferdyrurka\CommandBus\Repository\ElasticSearchRepositoryInterface;
@@ -21,11 +22,6 @@ use Psr\Container\ContainerInterface;
  */
 class LogFactory
 {
-    /**
-     *
-     */
-    public const ELASTIC_SEARCH = 0;
-
     /**
      * @var ContainerInterface
      */
@@ -41,16 +37,17 @@ class LogFactory
     }
 
     /**
-     * @param int $type
+     * @param string $type
      * @return RepositoryInterface
      * @throws LogFactoryException
      */
-    public function getRepository(int $type): RepositoryInterface
+    public function getRepository(string $type): RepositoryInterface
     {
-        if ($type === self::ELASTIC_SEARCH) {
-            return $this->container->get(ElasticSearchRepositoryInterface::class);
+        switch ($type) {
+            case ElasticSearchDatabase::DATABASE_NAME:
+                return $this->container->get(ElasticSearchRepositoryInterface::class);
+            default:
+                throw new LogFactoryException('Factory not found repository by key: ' . $type);
         }
-
-        throw new LogFactoryException('Factory not found repository by key: ' . $type);
     }
 }
