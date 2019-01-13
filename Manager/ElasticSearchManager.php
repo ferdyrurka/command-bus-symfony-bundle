@@ -62,7 +62,7 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
      */
     public function getIndex(): string
     {
-        $this->container->getParameter(self::PREFIX . 'index');
+        $this->container->getParameter(self::PREFIX . '_index');
     }
 
     /**
