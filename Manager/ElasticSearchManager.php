@@ -58,6 +58,14 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
     }
 
     /**
+     * @return string
+     */
+    public function getIndex(): string
+    {
+        $this->container->getParameter(self::PREFIX . 'index');
+    }
+
+    /**
      * @return Client
      */
     protected function createClient(): Client
