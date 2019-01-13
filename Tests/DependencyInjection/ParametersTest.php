@@ -48,27 +48,32 @@ class ParametersTest extends TestCase
     }
 
     /**
+     * @throws InvalidArgsConfException
+     * @throws \Ferdyrurka\CommandBus\Exception\UndefinedDatabaseTypeException
      * @runInSeparateProcess
      */
     public function testSetParameters(): void
     {
-        $databaseFactory = Mockery::mock('overload:' . DatabaseFactory::class);
-        $databaseFactory->shouldReceive('getDatabase')->once()
-            ->andReturn(Mockery::mock(DatabaseInterface::class));
-
         $this->config = [
             'handler_name' => '',
             'command_name' => '',
-            'save_statistic_handler' => false,
+            'save_statistic_handler' => true,
             'database_type' => 'elasticsearch',
             'connection' => [
                 'elasticsearch' => []
             ]
         ];
 
-        $this->containerBuilder->shouldReceive('setParameter')->times(3)
+        $databaseInterface = Mockery::mock(DatabaseInterface::class);
+        $databaseInterface->shouldReceive('setParameters')->once();
+
+        $databaseFactory = Mockery::mock('overload:' . DatabaseFactory::class);
+        $databaseFactory->shouldReceive('getDatabase')->once()
+            ->withArgs([$this->config['database_type']])->andReturn($databaseInterface);
+
+        $this->containerBuilder->shouldReceive('setParameter')->times(4)
             ->withArgs(
-                function (string $key, string $value) {
+                function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
                     if (
