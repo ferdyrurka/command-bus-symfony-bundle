@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  * Class CommandBusSymfonyExtension
  * @package Ferdyrurka\CommandBus\DependencyInjection
  */
-class CommandBusSymfonyExtension extends Extension
+final class CommandBusSymfonyExtension extends Extension
 {
     /**
      * @param array $configs
