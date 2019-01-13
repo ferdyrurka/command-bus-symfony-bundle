@@ -29,11 +29,6 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
     private const PREFIX = Parameters::PREFIX . '_' . ElasticSearchDatabase::DATABASE_NAME . '_';
 
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * @var ContainerInterface
      */
     protected $container;
@@ -45,8 +40,6 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-
-        $this->client = $this->createClient();
     }
 
     /**
@@ -54,7 +47,8 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
      */
     public function getManager(): Client
     {
-        return $this->client;
+
+        return $this->createClient();
     }
 
     /**
@@ -62,7 +56,7 @@ class ElasticSearchManager implements ElasticSearchManagerInterface
      */
     public function getIndex(): string
     {
-        $this->container->getParameter(self::PREFIX . '_index');
+        return $this->container->getParameter(self::PREFIX . 'index');
     }
 
     /**

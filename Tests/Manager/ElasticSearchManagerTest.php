@@ -58,13 +58,18 @@ class ElasticSearchManagerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->host = [
-          'host' => 'elasticsearch',
-          'port' => 9300,
-          'scheme' => 'http'
-        ];
-
         $this->container = Mockery::mock(ContainerInterface::class);
+
+        parent::setUp();
+    }
+
+    public function setUpClient(): void
+    {
+        $this->host = [
+            'host' => 'elasticsearch',
+            'port' => 9300,
+            'scheme' => 'http'
+        ];
 
         $this->client = Mockery::mock(Client::class);
 
@@ -87,8 +92,17 @@ class ElasticSearchManagerTest extends TestCase
         )
             ->andReturn($this->clientBuilder)
         ;
+    }
 
-        parent::setUp();
+    public function testGetIndex(): void
+    {
+        $this->container->shouldReceive('getParameter')
+            ->withArgs([Parameters::PREFIX . '_' . ElasticSearchDatabase::DATABASE_NAME . '_index'])
+            ->andReturn('my-index')
+        ;
+
+        $elasticSearchConnection = new ElasticSearchManager($this->container);
+        $this->assertEquals('my-index', $elasticSearchConnection->getIndex());
     }
 
     /**
@@ -96,6 +110,8 @@ class ElasticSearchManagerTest extends TestCase
      */
     public function testCreateClientNotAuth(): void
     {
+        $this->setUpClient();
+
         $this->container->shouldReceive('hasParameter')->andReturnFalse()->once();
         $this->container->shouldReceive('getParameter')->times(3)->withArgs(
                 function (string $key): bool
@@ -123,6 +139,8 @@ class ElasticSearchManagerTest extends TestCase
      */
     public function testCreateClientAuth(): void
     {
+        $this->setUpClient();
+
         $this->host['user'] = 'admin';
         $this->host['pass'] = 'admin!@#$%';
 
