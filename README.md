@@ -5,7 +5,7 @@ Package prepared for [english-platform](https://github.com/ferdyrurka/english-pl
 
 ## Documentation
 
-Documentation for CommandBus is in [click here](docs/index.md) 
+Documentation for CommandBus is in [click here](Resources/docs/index.md) 
 
 ## Stack
 
