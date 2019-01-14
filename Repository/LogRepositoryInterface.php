@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2018-2018 Łukasz Staniszewski <kontakt@lukaszstaniszewski.pl>
+ * Copyright (c) 2018-2019 Łukasz Staniszewski <kontakt@lukaszstaniszewski.pl>
  *
  * For the full copyright and license information, please view the
  * https://github.com/ferdyrurka/command-bus-symfony-bundle/blob/master/LICENSE
@@ -15,31 +15,19 @@ use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Manager\ManagerInterface;
 
 /**
- * Class LogRepository
+ * Interface LogRepositoryInterface
  * @package Ferdyrurka\CommandBus\Repository
  */
-class LogRepository implements RepositoryInterface, LogRepositoryInterface
+interface LogRepositoryInterface
 {
     /**
-     * @var ManagerInterface
-     */
-    protected $manager;
-
-    /**
-     * LogRepository constructor.
+     * LogRepositoryInterface constructor.
      * @param ManagerInterface $manager
      */
-    public function __construct(ManagerInterface $manager)
-    {
-        $this->manager = $manager->getManager();
-    }
+    public function __construct(ManagerInterface $manager);
 
     /**
      * @param Log $log
      */
-    public function create(Log $log): void
-    {
-        $this->manager->persist($log);
-        $this->manager->flush();
-    }
+    public function create(Log $log): void;
 }
