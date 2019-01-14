@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Test\FactoryMethod;
+namespace Ferdyrurka\CommandBus\Test\Factory;
 
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\Exception\LogFactoryException;
-use Ferdyrurka\CommandBus\FactoryMethod\LogFactory;
+use Ferdyrurka\CommandBus\Factory\LogFactory;
 use Ferdyrurka\CommandBus\Repository\RepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
@@ -21,7 +21,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Class LogFactoryTest
- * @package Ferdyrurka\Test\CommandBus\FactoryMethod
+ * @package Ferdyrurka\Test\CommandBus\Factory
  */
 class LogFactoryTest extends TestCase
 {

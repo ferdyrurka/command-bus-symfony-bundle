@@ -13,7 +13,7 @@ namespace Ferdyrurka\CommandBus\DependencyInjection;
 
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Exception\UndefinedDatabaseTypeException;
-use Ferdyrurka\CommandBus\FactoryMethod\DatabaseFactory;
+use Ferdyrurka\CommandBus\Factory\DatabaseFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

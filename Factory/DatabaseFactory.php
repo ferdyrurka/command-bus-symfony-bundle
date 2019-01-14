@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\FactoryMethod;
+namespace Ferdyrurka\CommandBus\Factory;
 
 use Ferdyrurka\CommandBus\DependencyInjection\Database\DatabaseInterface;
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class DatabaseFactory
- * @package Ferdyrurka\CommandBus\FactoryMethod
+ * @package Ferdyrurka\CommandBus\Factory
  */
 class DatabaseFactory
 {

@@ -18,7 +18,7 @@ use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Entity\Warn;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
-use Ferdyrurka\CommandBus\FactoryMethod\LogFactory;
+use Ferdyrurka\CommandBus\Factory\LogFactory;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
 use Ferdyrurka\CommandBus\Repository\ElasticSearchRepository;
 use PHPUnit\Framework\TestCase;

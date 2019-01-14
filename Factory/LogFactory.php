@@ -8,7 +8,7 @@
  */
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\FactoryMethod;
+namespace Ferdyrurka\CommandBus\Factory;
 
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\Exception\LogFactoryException;
@@ -18,7 +18,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Class LogFactory
- * @package Ferdyrurka\CommandBus\FactoryMethod
+ * @package Ferdyrurka\CommandBus\Factory
  */
 class LogFactory
 {

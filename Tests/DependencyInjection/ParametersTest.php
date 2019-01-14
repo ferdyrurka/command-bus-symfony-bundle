@@ -14,7 +14,7 @@ namespace Ferdyrurka\CommandBus\Test\DependencyInjection;
 use Ferdyrurka\CommandBus\DependencyInjection\Database\DatabaseInterface;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
-use Ferdyrurka\CommandBus\FactoryMethod\DatabaseFactory;
+use Ferdyrurka\CommandBus\Factory\DatabaseFactory;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
