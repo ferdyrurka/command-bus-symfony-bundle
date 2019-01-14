@@ -15,7 +15,7 @@ use Ferdyrurka\CommandBus\Command\CommandInterface;
 use Ferdyrurka\CommandBus\CommandBus;
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Entity\Warn;
+use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Factory\LogFactory;
@@ -98,7 +98,7 @@ class CommandBusTest extends TestCase
 
         $elasticSearchRepository = Mockery::mock(ElasticSearchRepository::class);
         $elasticSearchRepository->shouldReceive('create')->withArgs(
-            function (Warn $warn): bool
+            function (Log $warn): bool
             {
                 if (
                     $warn->getMessage() !== 'Handle EXCEPTION' ||

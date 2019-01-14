@@ -13,7 +13,7 @@ namespace Ferdyrurka\CommandBus;
 
 use Ferdyrurka\CommandBus\Command\CommandInterface;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Entity\Warn;
+use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Factory\LogFactory;
@@ -63,7 +63,7 @@ class CommandBus implements CommandBusInterface
                     $handlerNamespace = '';
                 }
 
-                $warn = new Warn(
+                $warn = new Log(
                     $date->format("Y-m-d H:i:s"),
                     $e->getMessage(),
                     $e->getLine(),

@@ -13,7 +13,7 @@ namespace Ferdyrurka\CommandBus\Test\Repository;
 
 use Elasticsearch\Client;
 use Ferdyrurka\CommandBus\Command\CommandInterface;
-use Ferdyrurka\CommandBus\Entity\Warn;
+use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\FerdyrurkaCommandBusException;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
 use Ferdyrurka\CommandBus\Manager\ElasticSearchManager;
@@ -31,7 +31,7 @@ class ElasticSearchRepositoryTest extends TestCase
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     /**
-     * @var Warn
+     * @var Log
      */
     private $warn;
 
@@ -43,7 +43,7 @@ class ElasticSearchRepositoryTest extends TestCase
         $date = new DateTime("now");
 
 
-        $this->warn = new Warn(
+        $this->warn = new Log(
             $date->format("Y-m-d H:i:s"),
             'Hello World',
             20,

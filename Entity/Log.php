@@ -14,10 +14,10 @@ namespace Ferdyrurka\CommandBus\Entity;
 
 
 /**
- * Class Warn
+ * Class Log
  * @package Ferdyrurka\CommandBus\Entity
  */
-class Warn
+class Log
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class Warn
     private $handler;
 
     /**
-     * Warn constructor.
+     * Log constructor.
      * @param string $exceptionTime
      * @param string $message
      * @param int $line

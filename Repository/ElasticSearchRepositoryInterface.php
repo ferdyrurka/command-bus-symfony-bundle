@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Repository;
 
-use Ferdyrurka\CommandBus\Entity\Warn;
+use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Manager\ElasticSearchManager;
 
 /**
@@ -27,7 +27,7 @@ interface ElasticSearchRepositoryInterface
     public function __construct(ElasticSearchManager $elasticSearchConnection);
 
     /**
-     * @param Warn $warn
+     * @param Log $warn
      */
-    public function create(Warn $warn): void;
+    public function create(Log $warn): void;
 }
