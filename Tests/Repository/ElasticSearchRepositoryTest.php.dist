@@ -17,7 +17,7 @@ use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\FerdyrurkaCommandBusException;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
 use Ferdyrurka\CommandBus\Manager\ElasticSearchManager;
-use Ferdyrurka\CommandBus\Repository\ElasticSearchRepository;
+use Ferdyrurka\CommandBus\Repository\LogRepository;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use \DateTime;
@@ -38,7 +38,7 @@ class ElasticSearchRepositoryTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testCreate(): void
+    public function Create(): void
     {
         $date = new DateTime("now");
 
@@ -81,7 +81,7 @@ class ElasticSearchRepositoryTest extends TestCase
         $elasticSearchManager->shouldReceive('getIndex')->once()->andReturn('my-index');
         $elasticSearchManager->shouldReceive('getManager')->once()->andReturn($client);
 
-        $elasticSearchRepository = new ElasticSearchRepository($elasticSearchManager);
+        $elasticSearchRepository = new LogRepository($elasticSearchManager);
         $elasticSearchRepository->create($this->warn);
     }
 }
