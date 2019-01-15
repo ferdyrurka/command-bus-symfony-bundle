@@ -47,18 +47,12 @@ class CommandBusTest extends TestCase
     private $handlerNamespace;
 
     /**
-     * @var CreateLogHandler
-     */
-    private $logHandler;
-
-    /**
      *
      */
     public function setUp()
     {
         $this->command = Mockery::mock(CommandInterface::class);
         $this->handler = Mockery::mock(HandlerInterface::class);
-        $this->logHandler = Mockery::mock(CreateLogHandler::class);
 
         $this->handlerNamespace = str_replace('Command', 'Handler', \get_class($this->command));
 
@@ -66,18 +60,20 @@ class CommandBusTest extends TestCase
     }
 
     /**
+     * @throws Exception
      * @runInSeparateProcess
      */
     public function testHandle(): void
     {
+        $logHandler = Mockery::mock(CreateLogHandler::class);
+        $logHandler->shouldReceive('handle')->once()->withArgs([CreateLogCommand::class]);
+
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
             ->andThrow(new Exception('Handle EXCEPTION'));
 
         $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->andReturn($this->handler, $this->logHandler)->once()
-            ->withArgs([$this->handlerNamespace])
-        ;
+        $container->shouldReceive('get')->andReturn($this->handler, $logHandler)->times(2);
 
         $container->shouldReceive('getParameter')
             ->withArgs(
@@ -95,11 +91,12 @@ class CommandBusTest extends TestCase
             ->times(3)->andReturn('Command', 'Handler', true)
         ;
 
-        $createLogCommand = Mockery::mock('overload:' . CreateLogCommand::class);
+        $createLogCommand = Mockery::mock('overload:' . CreateLogCommand::class, CommandInterface::class);
         $createLogCommand->shouldReceive('__construct')->withArgs(
-            function (string $message, int $line, string $command, string $handler): bool {
+            function (string $message, int $line, string $exception, string $command, string $handler): bool {
                 if ($message !== 'Handle EXCEPTION' ||
                     $command !== \get_class($this->command) ||
+                    empty($exception) ||
                     $handler !== \get_class($this->handler) ||
                     empty($line)
                 ) {
