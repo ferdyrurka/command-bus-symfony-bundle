@@ -82,7 +82,10 @@ class Parameters
     {
         $this->containerBuilder->setParameter(self::PREFIX . '_handler_name', $this->configs['handler_name']);
         $this->containerBuilder->setParameter(self::PREFIX . '_command_name', $this->configs['command_name']);
-        $this->containerBuilder->setParameter(self::PREFIX . '_save_statistic_handler', $this->configs['save_statistic_handler']);
+        $this->containerBuilder->setParameter(
+            self::PREFIX . '_save_statistic_handler',
+            $this->configs['save_statistic_handler']
+        );
     }
 
     /**
@@ -98,7 +101,5 @@ class Parameters
         $databaseFactory = new DatabaseFactory($this->configs['connection'], $this->containerBuilder);
         $databaseType = $databaseFactory->getDatabase($this->configs['database_type']);
         $databaseType->setParameters();
-
-        $this->containerBuilder->setParameter(self::PREFIX . '_database_type', $this->configs['database_type']);
     }
 }
