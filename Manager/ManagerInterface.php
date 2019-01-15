@@ -18,11 +18,6 @@ namespace Ferdyrurka\CommandBus\Manager;
 interface ManagerInterface
 {
     /**
-     * @return ManagerInterface
-     */
-    public function getManager(): self;
-
-    /**
      * @param object $entity
      */
     public function persist(object $entity): void;
