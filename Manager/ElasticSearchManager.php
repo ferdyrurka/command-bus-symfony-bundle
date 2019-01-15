@@ -12,75 +12,77 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus\Manager;
 
 use Elasticsearch\Client;
-use Elasticsearch\ClientBuilder;
-use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
-use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
+use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
+use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
 
 /**
  * Class ElasticSearchManager
  * @package Ferdyrurka\CommandBus\Util
  */
-class ElasticSearchManager implements ElasticSearchManagerInterface
+class ElasticSearchManager implements ManagerInterface
 {
     /**
-     *
+     * @var ElasticSearchConnection
      */
-    private const PREFIX = Parameters::PREFIX . '_' . ElasticSearchDatabase::DATABASE_NAME . '_';
+    protected $elasticSearchConnection;
 
     /**
-     * @var ContainerInterface
+     * @var Client
      */
-    protected $container;
+    protected $client;
+
+    /**
+     * @var string
+     */
+    protected $index;
+
+    /**
+     * @var array
+     */
+    protected $persists;
 
     /**
      * ElasticSearchManager constructor.
-     * @param ContainerInterface $container
+     * @param ElasticSearchConnection $elasticSearchConnection
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ElasticSearchConnection $elasticSearchConnection)
     {
-        $this->container = $container;
+        $this->elasticSearchConnection = $elasticSearchConnection;
     }
 
     /**
-     * @return Client
+     * @param object $entity
      */
-    public function getManager(): Client
+    public function persist(object $entity): void
     {
-
-        return $this->createClient();
+        $this->persists[] = $entity;
     }
 
     /**
-     * @return string
+     * @throws EmptyEntityException
+     * @throws \ReflectionException
      */
-    public function getIndex(): string
+    public function flush(): void
     {
-        return $this->container->getParameter(self::PREFIX . 'index');
-    }
-
-    /**
-     * @return Client
-     */
-    protected function createClient(): Client
-    {
-        $hosts = [
-            'host' => $this->container->getParameter(self::PREFIX . 'host'),
-            'port' => $this->container->getParameter(self::PREFIX . 'port'),
-            'scheme' => $this->container->getParameter(self::PREFIX . 'scheme')
-        ];
-
-        if (
-            $this->container->hasParameter(self::PREFIX . 'user') &&
-            $this->container->hasParameter(self::PREFIX . 'pass')
-        ) {
-            $hosts['user'] = $this->container->getParameter(self::PREFIX . 'user');
-            $hosts['pass'] = $this->container->getParameter(self::PREFIX . 'pass');
+        if (!$this->client instanceof Client || empty($this->index)) {
+            $this->client = $this->elasticSearchConnection->getClient();
+            $this->index = $this->elasticSearchConnection->getIndex();
         }
 
-        return ClientBuilder::create()
-            ->setHosts($hosts)
-            ->setRetries(2)
-            ->build();
+        foreach ($this->persists as $persist) {
+            $reflectionEntity = new ReflectionEntity($persist);
+            $body = $reflectionEntity->getGettersEntity();
+
+            if (empty($body)) {
+                throw new EmptyEntityException('Body is empty');
+            }
+
+            $this->client->create([
+                'index' => $this->index,
+                'type' => 'command-bus',
+                'body' => $body
+            ]);
+        }
     }
 }
