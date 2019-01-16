@@ -11,17 +11,19 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Manager;
 
-use Elasticsearch\Client;
-use Elasticsearch\ClientBuilder;
-
 /**
- * Interface ElasticSearchManagerInterface
+ * Interface ManagerInterface
  * @package Ferdyrurka\CommandBus\Manager
  */
-interface ElasticSearchManagerInterface
+interface ManagerInterface
 {
     /**
-     * @return Client
+     * @param object $entity
      */
-    public function getManager(): Client;
+    public function persist(object $entity): void;
+
+    /**
+     *
+     */
+    public function flush(): void;
 }

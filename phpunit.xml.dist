@@ -13,18 +13,27 @@
 
     <testsuites>
         <testsuite name="default">
-            <directory>tests</directory>
+            <directory>./Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./src</directory>
+            <directory>./</directory>
 
             <!-- Exclude directory and file -->
 
             <exclude>
-
+                <directory>./Exception</directory>
+                <directory>./Command</directory>
+                <directory>./Handler</directory>
+                <directory>./Entity</directory>
+                <directory>./vendor</directory>
+                <directory>./Tests</directory>
+                <directory>./Repository</directory>
+                <file>./DependencyInjection/CommandBusSymfonyExtension.php</file>
+                <file>./DependencyInjection/Configuration.php</file>
+                <file>./CommandBusSymfonyBundle.php</file>
             </exclude>
         </whitelist>
     </filter>

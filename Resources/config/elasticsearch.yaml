@@ -1,0 +1,6 @@
+services:
+
+  Ferdyrurka\CommandBus\Handler\CreateLogHandler:
+    class: 'Ferdyrurka\CommandBus\Handler\CreateLogHandler'
+    arguments:
+      - '@Ferdyrurka\CommandBus\Manager\ElasticSearchManager'

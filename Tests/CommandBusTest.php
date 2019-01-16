@@ -12,15 +12,12 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus\Test;
 
 use Ferdyrurka\CommandBus\Command\CommandInterface;
+use Ferdyrurka\CommandBus\Command\CreateLogCommand;
 use Ferdyrurka\CommandBus\CommandBus;
-use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Entity\Warn;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
-use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
-use Ferdyrurka\CommandBus\FactoryMethod\LogFactory;
+use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
-use Ferdyrurka\CommandBus\Repository\ElasticSearchRepository;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use \Exception;
@@ -63,29 +60,27 @@ class CommandBusTest extends TestCase
     }
 
     /**
-     * @throws InvalidArgsConfException
+     * @throws Exception
      * @runInSeparateProcess
      */
     public function testHandle(): void
     {
+        $logHandler = Mockery::mock(CreateLogHandler::class);
+        $logHandler->shouldReceive('handle')->once()->withArgs([CreateLogCommand::class]);
+
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
             ->andThrow(new Exception('Handle EXCEPTION'));
 
         $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
+        $container->shouldReceive('get')->andReturn($this->handler, $logHandler)->times(2);
 
-        $container->shouldReceive('hasParameter')->withArgs([Parameters::PREFIX . '_database_type'])->once()
-            ->andReturnTrue();
         $container->shouldReceive('getParameter')
             ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
+                function (string $key): bool {
+                    if (Parameters::PREFIX . '_command_name' !== $key &&
                         Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key &&
-                        Parameters::PREFIX . '_database_type' !== $key
+                        Parameters::PREFIX . '_save_statistic_handler' !== $key
                     ) {
                         return false;
                     }
@@ -93,31 +88,24 @@ class CommandBusTest extends TestCase
                     return true;
                 }
             )
-            ->times(4)->andReturn('Command', 'Handler', true, ElasticSearchDatabase::DATABASE_NAME)
+            ->times(3)->andReturn('Command', 'Handler', true)
         ;
 
-        $elasticSearchRepository = Mockery::mock(ElasticSearchRepository::class);
-        $elasticSearchRepository->shouldReceive('create')->withArgs(
-            function (Warn $warn): bool
-            {
-                if (
-                    $warn->getMessage() !== 'Handle EXCEPTION' ||
-                    $warn->getCommand() !== \get_class($this->command) ||
-                    $warn->getHandler() !== \get_class($this->handler) ||
-                    empty($warn->getExceptionTime()) ||
-                    empty($warn->getLine())
+        $createLogCommand = Mockery::mock('overload:' . CreateLogCommand::class, CommandInterface::class);
+        $createLogCommand->shouldReceive('__construct')->withArgs(
+            function (string $message, int $line, string $exception, string $command, string $handler): bool {
+                if ($message !== 'Handle EXCEPTION' ||
+                    $command !== \get_class($this->command) ||
+                    empty($exception) ||
+                    $handler !== \get_class($this->handler) ||
+                    empty($line)
                 ) {
                     return false;
                 }
 
                 return true;
             }
-        )->once();
-
-        $logFactory = Mockery::mock('overload:' . LogFactory::class);
-        $logFactory->shouldReceive('__construct')->withArgs([ContainerInterface::class])->once();
-        $logFactory->shouldReceive('getRepository')->once()->withArgs([ElasticSearchDatabase::DATABASE_NAME])
-            ->andReturn($elasticSearchRepository);
+        );
 
         $commandBus = new CommandBus($container);
 
@@ -125,9 +113,6 @@ class CommandBusTest extends TestCase
         $commandBus->handle($this->command);
     }
 
-    /**
-     * @throws InvalidArgsConfException
-     */
     public function testNoSaveData(): void
     {
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
@@ -138,10 +123,8 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
         $container->shouldReceive('getParameter')
             ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
+                function (string $key): bool {
+                    if (Parameters::PREFIX . '_command_name' !== $key &&
                         Parameters::PREFIX . '_handler_name' !== $key &&
                         Parameters::PREFIX . '_save_statistic_handler' !== $key
                     ) {
@@ -160,9 +143,6 @@ class CommandBusTest extends TestCase
         $commandBus->handle($this->command);
     }
 
-    /**
-     * @throws InvalidArgsConfException
-     */
     public function testNotException(): void
     {
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class]);
@@ -172,10 +152,8 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
         $container->shouldReceive('getParameter')
             ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
+                function (string $key): bool {
+                    if (Parameters::PREFIX . '_command_name' !== $key &&
                         Parameters::PREFIX . '_handler_name' !== $key
                     ) {
                         return false;
@@ -191,57 +169,14 @@ class CommandBusTest extends TestCase
         $commandBus->handle($this->command);
     }
 
-    /**
-     * @throws InvalidArgsConfException
-     */
-    public function testInvalidArgsException(): void
-    {
-        $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
-            ->andThrow(new Exception('Handle EXCEPTION'));
-
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
-
-        $container->shouldReceive('hasParameter')->withArgs([Parameters::PREFIX . '_database_type'])->once()
-            ->andReturnFalse();
-        $container->shouldReceive('getParameter')
-            ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key
-                    ) {
-                        return false;
-                    }
-
-                    return true;
-                }
-            )
-            ->times(3)->andReturn('Command', 'Handler', true)
-        ;
-
-        $commandBus = new CommandBus($container);
-
-        $this->expectException(InvalidArgsConfException::class);
-        $commandBus->handle($this->command);
-    }
-
-    /**
-     * @throws InvalidArgsConfException
-     */
     public function testHandleNotFoundException(): void
     {
         $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(false)->once();
         $container->shouldReceive('getParameter')
             ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
+                function (string $key): bool {
+                    if (Parameters::PREFIX . '_command_name' !== $key &&
                         Parameters::PREFIX . '_handler_name' !== $key &&
                         Parameters::PREFIX . '_save_statistic_handler' !== $key
                     ) {
@@ -260,9 +195,7 @@ class CommandBusTest extends TestCase
         $commandBus->handle($this->command);
     }
 
-    /**
-     * @throws InvalidArgsConfException
-     */
+
     public function testHandlerNotImplementsInterface(): void
     {
         $container = Mockery::mock(ContainerInterface::class);
@@ -270,10 +203,8 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->command)->once();
         $container->shouldReceive('getParameter')
             ->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        Parameters::PREFIX . '_command_name' !== $key &&
+                function (string $key): bool {
+                    if (Parameters::PREFIX . '_command_name' !== $key &&
                         Parameters::PREFIX . '_handler_name' !== $key &&
                         Parameters::PREFIX . '_save_statistic_handler' !== $key
                     ) {

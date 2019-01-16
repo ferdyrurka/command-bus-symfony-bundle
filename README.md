@@ -1,7 +1,6 @@
 # CommandBus Symfony Bundle
 
-This package is ready to development for CQRS and DDD. 
-Package prepared for [english-platform](https://github.com/ferdyrurka/english-platform) project.
+This open-source package is ready to development for CQRS and DDD. 
 
 ## Documentation
 
@@ -12,6 +11,7 @@ Documentation for CommandBus is in [click here](Resources/docs/index.md)
 * PHP7.3
 * PHPUnit
 * Mockery
+* ElasticSearch
 
 ## Coverage
 
@@ -22,6 +22,13 @@ Documentation for CommandBus is in [click here](Resources/docs/index.md)
 ```sh
 php vendor/bin/phpunit
 ```
+
+## Soon
+
+* New database (Staff Doctrine2)
+* QueryBus
+* EventBus
+* Safe your data. Not worked MySQL, added command to queue and waited to save.
 
 ## License 
 

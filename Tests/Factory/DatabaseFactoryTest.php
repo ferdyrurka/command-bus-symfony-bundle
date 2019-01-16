@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Test\FactoryMethod;
+namespace Ferdyrurka\CommandBus\Test\Factory;
 
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Exception\UndefinedDatabaseTypeException;
-use Ferdyrurka\CommandBus\FactoryMethod\DatabaseFactory;
+use Ferdyrurka\CommandBus\Factory\DatabaseFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Mockery;

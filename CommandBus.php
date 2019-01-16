@@ -12,16 +12,14 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus;
 
 use Ferdyrurka\CommandBus\Command\CommandInterface;
+use Ferdyrurka\CommandBus\Command\CreateLogCommand;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Entity\Warn;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
-use Ferdyrurka\CommandBus\FactoryMethod\LogFactory;
+use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
-use Ferdyrurka\CommandBus\Repository\RepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Exception;
-use \DateTime;
 
 /**
  * Class CommandBus
@@ -45,26 +43,22 @@ class CommandBus implements CommandBusInterface
 
     /**
      * @param CommandInterface $command
-     * @throws InvalidArgsConfException
      * @throws Exception
      */
     public function handle(CommandInterface $command): void
     {
-        try{
+        try {
             $handler = $this->getHandleFromCommand(\get_class($command));
             $handler->handle($command);
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_statistic_handler')) {
-                $date = new DateTime("now");
-
                 if (\is_object($handler)) {
                     $handlerNamespace = \get_class($handler);
                 } else {
                     $handlerNamespace = '';
                 }
 
-                $warn = new Warn(
-                    $date->format("Y-m-d H:i:s"),
+                $createLogCommand = new CreateLogCommand(
                     $e->getMessage(),
                     $e->getLine(),
                     \get_class($e),
@@ -72,8 +66,8 @@ class CommandBus implements CommandBusInterface
                     $handlerNamespace
                 );
 
-                $logRepository = $this->getLogRepository();
-                $logRepository->create($warn);
+                $createLogHandler = $this->container->get(CreateLogHandler::class);
+                $createLogHandler->handle($createLogCommand);
             }
 
             throw $e;
@@ -93,7 +87,7 @@ class CommandBus implements CommandBusInterface
             $commandNamespace
         );
 
-        if(!$this->container->has($handlerNamespace)) {
+        if (!$this->container->has($handlerNamespace)) {
             throw new HandlerNotFoundException('Handler not found by namespace: ' . $handlerNamespace);
         }
 
@@ -104,24 +98,5 @@ class CommandBus implements CommandBusInterface
         }
 
         return $handler;
-    }
-
-    /**
-     * @return RepositoryInterface
-     * @throws Ferdyrurka\CommandBus\Exception\LogFactoryException
-     * @throws InvalidArgsConfException
-     */
-    private function getLogRepository(): RepositoryInterface
-    {
-        if (!$this->container->hasParameter(Parameters::PREFIX . '_database_type')) {
-            throw new InvalidArgsConfException('No has parameter database_type');
-        }
-
-        $logFactory = new LogFactory($this->container);
-
-        return $logFactory->getRepository(
-            (string) $this->container->getParameter(Parameters::PREFIX . '_database_type')
-        );
-
     }
 }

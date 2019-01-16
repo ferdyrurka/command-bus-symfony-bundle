@@ -14,7 +14,7 @@ namespace Ferdyrurka\CommandBus\Test\DependencyInjection;
 use Ferdyrurka\CommandBus\DependencyInjection\Database\DatabaseInterface;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
-use Ferdyrurka\CommandBus\FactoryMethod\DatabaseFactory;
+use Ferdyrurka\CommandBus\Factory\DatabaseFactory;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -71,25 +71,21 @@ class ParametersTest extends TestCase
         $databaseFactory->shouldReceive('getDatabase')->once()
             ->withArgs([$this->config['database_type']])->andReturn($databaseInterface);
 
-        $this->containerBuilder->shouldReceive('setParameter')->times(4)
+        $this->containerBuilder->shouldReceive('setParameter')->times(3)
             ->withArgs(
                 function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
-                    if (
-                        $key !== $prefix . '_handler_name' &&
+                    if ($key !== $prefix . '_handler_name' &&
                         $key !== $prefix . '_command_name' &&
-                        $key !== $prefix . '_save_statistic_handler' &&
-                        $key !== $prefix . '_database_type'
+                        $key !== $prefix . '_save_statistic_handler'
                     ) {
                         return false;
                     }
 
-                    if (
-                        $value !== $this->config['handler_name'] &&
+                    if ($value !== $this->config['handler_name'] &&
                         $value !== $this->config['command_name'] &&
-                        $value !== $this->config['save_statistic_handler'] &&
-                        $value !== $this->config['database_type']
+                        $value !== $this->config['save_statistic_handler']
                     ) {
                         return false;
                     }
@@ -119,7 +115,6 @@ class ParametersTest extends TestCase
 
         $parameters = new Parameters($this->containerBuilder, $this->config);
         $parameters->setParameters();
-
     }
 
     /**
@@ -165,16 +160,14 @@ class ParametersTest extends TestCase
                 function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
-                    if (
-                        $key !== $prefix . '_handler_name' &&
+                    if ($key !== $prefix . '_handler_name' &&
                         $key !== $prefix . '_command_name' &&
                         $key !== $prefix . '_save_statistic_handler'
                     ) {
                         return false;
                     }
 
-                    if (
-                        $value !== $this->config['handler_name'] &&
+                    if ($value !== $this->config['handler_name'] &&
                         $value !== $this->config['command_name'] &&
                         $value !== $this->config['save_statistic_handler']
                     ) {

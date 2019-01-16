@@ -14,10 +14,10 @@ namespace Ferdyrurka\CommandBus\Entity;
 
 
 /**
- * Class Warn
+ * Class Log
  * @package Ferdyrurka\CommandBus\Entity
  */
-class Warn
+class Log
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class Warn
     private $handler;
 
     /**
-     * Warn constructor.
+     * Log constructor.
      * @param string $exceptionTime
      * @param string $message
      * @param int $line
@@ -58,8 +58,14 @@ class Warn
      * @param string $command
      * @param string $handler
      */
-    public function __construct(string $exceptionTime, string $message, int $line, string $exception, string $command, string $handler)
-    {
+    public function __construct(
+        string $exceptionTime,
+        string $message,
+        int $line,
+        string $exception,
+        string $command,
+        string $handler
+    ) {
         $this->exceptionTime = $exceptionTime;
         $this->message = $message;
         $this->line = $line;
