@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\DependencyInjection;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -33,6 +35,15 @@ final class CommandBusSymfonyExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $config = $config[0][Parameters::PREFIX];
+
+        if ((bool) $config['save_statistic_handler']) {
+            $loader = new YamlFileLoader(
+                $container,
+                new FileLocator(__DIR__ . '../Resources/config')
+            );
+
+            $loader->load($config['database_type'] . '.yaml');
+        }
 
         $parameters = new Parameters($container, $config);
         $parameters->setParameters();
