@@ -31,7 +31,7 @@ class LogRepository implements RepositoryInterface, LogRepositoryInterface
      */
     public function __construct(ManagerInterface $manager)
     {
-        $this->manager = $manager->getManager();
+        $this->manager = $manager;
     }
 
     /**
