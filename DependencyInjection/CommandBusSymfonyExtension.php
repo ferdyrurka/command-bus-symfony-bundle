@@ -37,7 +37,7 @@ final class CommandBusSymfonyExtension extends Extension
         if ((bool) $config['save_statistic_handler']) {
             $loader = new YamlFileLoader(
                 $container,
-                new FileLocator(__DIR__ . '../Resources/config')
+                new FileLocator(__DIR__ . '/../Resources/config')
             );
 
             $loader->load($config['database_type'] . '.yaml');
