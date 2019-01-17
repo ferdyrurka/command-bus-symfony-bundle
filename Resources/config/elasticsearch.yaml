@@ -1,5 +1,9 @@
 services:
 
+  Ferdyrurka\CommandBus\CommandBusInterface:
+    class: 'Ferdyrurka\CommandBus\CommandBus'
+    autowire: true
+
   Ferdyrurka\CommandBus\Handler\CreateLogHandler:
     class: 'Ferdyrurka\CommandBus\Handler\CreateLogHandler'
     arguments:
