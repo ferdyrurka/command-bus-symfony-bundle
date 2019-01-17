@@ -41,14 +41,11 @@ class Parameters
      * Parameters constructor.
      * @param ContainerBuilder $containerBuilder
      * @param array $configs
-     * @throws InvalidArgsConfException
      */
     public function __construct(ContainerBuilder $containerBuilder, array $configs)
     {
         $this->containerBuilder = $containerBuilder;
         $this->configs = $configs;
-
-        $this->validConf();
     }
 
     /**
@@ -61,17 +58,6 @@ class Parameters
 
         if ((boolean) $this->configs['save_statistic_handler']) {
             $this->setTypeDatabase();
-        }
-    }
-
-    /**
-     * Validate configs array to set parameters
-     * @throws InvalidArgsConfException
-     */
-    private function validConf(): void
-    {
-        if (isset($this->configs[0][self::PREFIX])) {
-            throw new InvalidArgsConfException('Invalid put data configuration!');
         }
     }
 

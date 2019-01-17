@@ -34,8 +34,6 @@ final class CommandBusSymfonyExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
 
-        $config = $config[0][Parameters::PREFIX];
-
         if ((bool) $config['save_statistic_handler']) {
             $loader = new YamlFileLoader(
                 $container,
