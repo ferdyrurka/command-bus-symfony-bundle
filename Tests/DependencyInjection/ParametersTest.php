@@ -119,19 +119,6 @@ class ParametersTest extends TestCase
 
     /**
      * @throws InvalidArgsConfException
-     */
-    public function testValidConfException(): void
-    {
-        $config = [
-            0 => [Parameters::PREFIX => []]
-        ];
-
-        $this->expectException(InvalidArgsConfException::class);
-        new Parameters($this->containerBuilder, $config);
-    }
-
-    /**
-     * @throws InvalidArgsConfException
      * @throws \Ferdyrurka\CommandBus\Exception\UndefinedDatabaseTypeException
      */
     public function testTypeDatabaseException(): void

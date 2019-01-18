@@ -91,12 +91,11 @@ class ElasticSearchConnection implements ElasticSearchConnectionInterface
     {
         $hosts = [
             'host' => $this->container->getParameter(self::PREFIX . 'host'),
-            'port' => $this->container->getParameter(self::PREFIX . 'port'),
+            'port' => "{$this->container->getParameter(self::PREFIX . 'port')}",
             'scheme' => $this->container->getParameter(self::PREFIX . 'scheme')
         ];
 
-        if (
-            $this->container->hasParameter(self::PREFIX . 'user') &&
+        if ($this->container->hasParameter(self::PREFIX . 'user') &&
             $this->container->hasParameter(self::PREFIX . 'pass')
         ) {
             $hosts['user'] = $this->container->getParameter(self::PREFIX . 'user');

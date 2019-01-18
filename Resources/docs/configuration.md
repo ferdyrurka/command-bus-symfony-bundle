@@ -1,5 +1,15 @@
 # Configuration
 
+Added in bundles.php this class:
+
+```php
+    Ferdyrurka\CommandBus\CommandBusSymfonyBundle::class => ['all' => true],
+```
+
+Create file in config/packages
+
+command_bus_symfony.yaml
+
 ```yaml
 command_bus_symfony:
 
@@ -27,7 +37,7 @@ command_bus_symfony:
     # Data to elasticsearch
     # Is required if save_statistic_handler: true and database_type: elasticsearch
     connection: 
-        elasticSearch:
+        elasticsearch:
     
             # Default: elasticsearch 
             host: 'example.com'

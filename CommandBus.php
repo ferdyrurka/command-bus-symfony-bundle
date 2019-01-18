@@ -14,7 +14,6 @@ namespace Ferdyrurka\CommandBus;
 use Ferdyrurka\CommandBus\Command\CommandInterface;
 use Ferdyrurka\CommandBus\Command\CreateLogCommand;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Exception\InvalidArgsConfException;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
@@ -33,6 +32,11 @@ class CommandBus implements CommandBusInterface
     protected $container;
 
     /**
+     * @var HandlerInterface
+     */
+    protected $handler;
+
+    /**
      * CommandBus constructor.
      * @param ContainerInterface $container
      */
@@ -48,12 +52,12 @@ class CommandBus implements CommandBusInterface
     public function handle(CommandInterface $command): void
     {
         try {
-            $handler = $this->getHandleFromCommand(\get_class($command));
-            $handler->handle($command);
+            $this->handler = $this->getHandleFromCommand(\get_class($command));
+            $this->handler->handle($command);
         } catch (Exception $e) {
             if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_statistic_handler')) {
-                if (\is_object($handler)) {
-                    $handlerNamespace = \get_class($handler);
+                if (\is_object($this->handler)) {
+                    $handlerNamespace = \get_class($this->handler);
                 } else {
                     $handlerNamespace = '';
                 }

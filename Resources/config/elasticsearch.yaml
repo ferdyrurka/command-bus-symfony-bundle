@@ -1,6 +1,27 @@
 services:
 
-  Ferdyrurka\CommandBus\Handler\CreateLogHandler:
-    class: 'Ferdyrurka\CommandBus\Handler\CreateLogHandler'
+  Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection:
+    class: 'Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection'
+    public: true
+    autowire: true
+
+  Ferdyrurka\CommandBus\Manager\ElasticSearchManager:
+    class: 'Ferdyrurka\CommandBus\Manager\ElasticSearchManager'
+    public: true
+    autowire: true
+
+  Ferdyrurka\CommandBus\Repository\LogRepositoryInterface:
+    class: 'Ferdyrurka\CommandBus\Repository\LogRepository'
+    public: true
+    autowire: false
     arguments:
       - '@Ferdyrurka\CommandBus\Manager\ElasticSearchManager'
+
+  Ferdyrurka\CommandBus\Handler\CreateLogHandler:
+    class: 'Ferdyrurka\CommandBus\Handler\CreateLogHandler'
+    autowire: true
+    public: true
+
+  Ferdyrurka\CommandBus\CommandBusInterface:
+    class: 'Ferdyrurka\CommandBus\CommandBus'
+    autowire: true

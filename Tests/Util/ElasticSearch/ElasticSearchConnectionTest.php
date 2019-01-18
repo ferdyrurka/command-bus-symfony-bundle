@@ -70,7 +70,7 @@ class ElasticSearchConnectionTest extends TestCase
     {
         $this->host = [
             'host' => 'elasticsearch',
-            'port' => 9300,
+            'port' => '9300',
             'scheme' => 'http'
         ];
 
@@ -82,8 +82,7 @@ class ElasticSearchConnectionTest extends TestCase
         $this->clientBuilder->shouldReceive('create')->once()->andReturn($this->clientBuilder);
 
         $this->clientBuilder->shouldReceive('setHosts')->withArgs(
-            function (array $host): bool
-            {
+            function (array $host): bool {
                 foreach ($host as $key => $value) {
                     if ($this->host[$key] !== $value) {
                         return false;
@@ -121,19 +120,17 @@ class ElasticSearchConnectionTest extends TestCase
 
         $this->container->shouldReceive('hasParameter')->andReturnFalse()->once();
         $this->container->shouldReceive('getParameter')->times(3)->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        $key !== self::PREFIX . 'host' &&
-                        $key !== self::PREFIX . 'port' &&
-                        $key !== self::PREFIX . 'scheme'
-                    ) {
-                        return false;
-                    }
-
-                    return true;
+            function (string $key): bool {
+                if ($key !== self::PREFIX . 'host' &&
+                    $key !== self::PREFIX . 'port' &&
+                    $key !== self::PREFIX . 'scheme'
+                ) {
+                    return false;
                 }
-            )
+
+                return true;
+            }
+        )
             ->andReturn($this->host['host'], $this->host['port'], $this->host['scheme'])
         ;
 
@@ -153,21 +150,19 @@ class ElasticSearchConnectionTest extends TestCase
 
         $this->container->shouldReceive('hasParameter')->andReturnTrue()->times(2);
         $this->container->shouldReceive('getParameter')->times(5)->withArgs(
-                function (string $key): bool
-                {
-                    if (
-                        $key !== self::PREFIX . 'host' &&
-                        $key !== self::PREFIX . 'port' &&
-                        $key !== self::PREFIX . 'scheme' &&
-                        $key !== self::PREFIX . 'user' &&
-                        $key !== self::PREFIX . 'pass'
-                    ) {
-                        return false;
-                    }
-
-                    return true;
+            function (string $key): bool {
+                if ($key !== self::PREFIX . 'host' &&
+                    $key !== self::PREFIX . 'port' &&
+                    $key !== self::PREFIX . 'scheme' &&
+                    $key !== self::PREFIX . 'user' &&
+                    $key !== self::PREFIX . 'pass'
+                ) {
+                    return false;
                 }
-            )
+
+                return true;
+            }
+        )
             ->andReturn(
                 $this->host['host'],
                 $this->host['port'],

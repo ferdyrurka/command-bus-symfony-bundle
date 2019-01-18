@@ -78,7 +78,7 @@ class ElasticSearchManager implements ManagerInterface
                 throw new EmptyEntityException('Body is empty');
             }
 
-            $this->client->create([
+            $this->client->index([
                 'index' => $this->index,
                 'type' => 'command-bus',
                 'body' => $body
