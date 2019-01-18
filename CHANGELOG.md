@@ -4,9 +4,13 @@
 
 Fix:
 
+* ElasticSearchConnection fix port
+* Undefined method in LogRepository
+* Services corrected
 * Undefined index in config array
 * Failed path to services configuration
 * Docs failed link and configuration
+* ElasticSearchManager - create method to index method
 
 # v0.0.1-beta (14.01.2019)
 
