@@ -35,13 +35,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('handler_name')
                     ->isRequired()
                     ->defaultValue('Handler')
-                    ->validate('/^([A-Z|a-z|0-9| |-|\/]){0,1000}$/')
                     ->end()
 
                 ->scalarNode('command_name')
                     ->isRequired()
                     ->defaultValue('Command')
-                    ->validate('/^([A-Z|a-z|0-9| |-|\/]){0,1000}$/')
                     ->end()
 
                 ->booleanNode('save_statistic_handler')
@@ -50,7 +48,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
 
                 ->scalarNode('database_type')
-                    ->validate('/^(elasticsearch|)$/')
                     ->end()
 
                 ->arrayNode('connection')
@@ -65,11 +62,9 @@ class Configuration implements ConfigurationInterface
                                     ->defaultValue('elasticsearch')
                                     ->end()
                                 ->integerNode('port')
-                                    ->validate('/^([0-9]){0,5}$/')
                                     ->defaultValue('9200')
                                     ->end()
                                 ->scalarNode('scheme')
-                                    ->validate('/^(https|http)$/')
                                     ->defaultValue('https')
                                     ->end()
                                 ->scalarNode('index')
