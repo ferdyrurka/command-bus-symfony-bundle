@@ -1,6 +1,44 @@
 # Change log
 
+# v0.0.4 (unknown)
+
+Implementation enhancements:
+
+* none
+
+Propose:
+
+* Addition log to RabbitMQ
+* Staff MySQL, Postgresql, MongoDb (Doctrine2)
+* Rename package to ServiceBus 
+
+Fix: 
+
+* none
+
+# v0.0.3 (26.01.2019)
+
+Implementation enhancements:
+
+* QueryBus
+
+Propose:
+
+* None
+
+Fix:
+
+* none
+
 # v0.0.2-beta (17.01.2019)
+
+Implementation enhancements:
+
+* none
+
+Propose:
+
+* none
 
 Fix:
 
@@ -23,6 +61,10 @@ Implementation enhancements:
 * Modificated ElasticSearchManager
 * One repository, put manager in constructor
 
+Propose:
+
+* None
+
 Fix:
 
 * None
@@ -36,3 +78,11 @@ Implementation enhancements:
 * Elasticsearch2
     * Save throws
     * Save time execute
+    
+Propose:
+
+* None
+
+Fix:
+
+* None
