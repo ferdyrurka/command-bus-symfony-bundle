@@ -1,5 +1,19 @@
 # Change log
 
+# v0.0.5 (unknown)
+
+Implementation enhancements:
+
+* none
+
+Propose:
+
+* Addition version for projects not based on Symfony4.
+
+Fix: 
+
+* none
+
 # v0.0.4 (unknown)
 
 Implementation enhancements:
@@ -21,6 +35,7 @@ Fix:
 Implementation enhancements:
 
 * QueryBus
+* Configuration validate
 
 Propose:
 
