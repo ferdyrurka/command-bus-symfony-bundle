@@ -2,6 +2,16 @@
 
 This open-source package is ready to development for CQRS and DDD. 
 
+## Status build
+
+### develop
+
+[![Build Status](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle.svg?branch=develop)](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle)
+
+### Current version (master)
+
+[![Build Status](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle.svg?branch=master)](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle)
+
 ## Documentation
 
 Documentation for CommandBus is in [click here](Resources/docs/index.md) 
