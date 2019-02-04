@@ -14,7 +14,7 @@ namespace Ferdyrurka\CommandBus\Test\Manager;
 use Elasticsearch\Client;
 use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
-use Ferdyrurka\CommandBus\Manager\ElasticSearchManager;
+use Ferdyrurka\CommandBus\Manager\ElasticSearch\ElasticSearchManager;
 use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
 use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
 use PHPUnit\Framework\TestCase;

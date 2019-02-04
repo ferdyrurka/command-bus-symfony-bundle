@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Manager;
+namespace Ferdyrurka\CommandBus\Manager\ElasticSearch;
 
 /**
  * Interface ManagerInterface
