@@ -14,7 +14,7 @@ namespace Ferdyrurka\CommandBus\Manager\ElasticSearch;
 use Elasticsearch\Client;
 use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
 use Ferdyrurka\CommandBus\Manager\ManagerInterface;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
+use Ferdyrurka\CommandBus\Connection\ElasticSearch\ElasticSearchConnection;
 use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
 
 /**
