@@ -41,7 +41,7 @@ class ElasticSearchManager implements ManagerInterface
     /**
      * @var array
      */
-    protected $persists;
+    protected $persists = [];
 
     /**
      * ElasticSearchManager constructor.
@@ -71,7 +71,7 @@ class ElasticSearchManager implements ManagerInterface
             $this->index = $this->elasticSearchConnection->getIndex();
         }
 
-        foreach ($this->persists as $persist) {
+        foreach ($this->persists as $key => $persist) {
             $reflectionEntity = new ReflectionEntity($persist);
             $body = $reflectionEntity->getGettersEntity();
 
@@ -84,6 +84,8 @@ class ElasticSearchManager implements ManagerInterface
                 'type' => 'command-bus',
                 'body' => $body
             ]);
+
+            unset($this->persists[$key]);
         }
     }
 }
