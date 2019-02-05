@@ -14,7 +14,7 @@ namespace Ferdyrurka\CommandBus\Test\Util\ElasticSearch;
 use Ferdyrurka\CommandBus\Command\CommandInterface;
 use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
+use Ferdyrurka\CommandBus\Util\ReflectionEntity;
 use PHPUnit\Framework\TestCase;
 use \Exception;
 
