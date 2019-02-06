@@ -16,7 +16,7 @@ use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
 use Ferdyrurka\CommandBus\Manager\ElasticSearch\ElasticSearchManager;
 use Ferdyrurka\CommandBus\Connection\ElasticSearch\ElasticSearchConnection;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
+use Ferdyrurka\CommandBus\Util\ReflectionEntity;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 
