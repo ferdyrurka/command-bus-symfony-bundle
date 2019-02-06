@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Command;
 
-use Ferdyrurka\CommandBus\Entity\Info;
+use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 
 /**
  * Class CreateInfoCommand
@@ -20,28 +20,89 @@ use Ferdyrurka\CommandBus\Entity\Info;
 class CreateInfoCommand implements CommandInterface
 {
     /**
-     * @var Info
+     * @var ViewObjectInterface
      */
-    private $info;
+    private $result;
+
+    /**
+     * @var string
+     */
+    private $time;
+
+    /**
+     * @var string
+     */
+    private $query;
+
+    /**
+     * @var string
+     */
+    private $command;
+
+    /**
+     * @var string
+     */
+    private $viewObject;
 
     /**
      * CreateInfoCommand constructor.
-     * @param string $result
+     * @param ViewObjectInterface $result
      * @param string $time
      * @param string $query
      * @param string $command
      * @param string $viewObject
      */
-    public function __construct(string $result, string $time, string $query, string $command, string $viewObject)
-    {
-        $this->info = new Info($result, $time, $query, $command, $viewObject);
+    public function __construct(
+        ViewObjectInterface $result,
+        string $time,
+        string $query,
+        string $command,
+        string $viewObject
+    ) {
+        $this->result = $result;
+        $this->time = $time;
+        $this->query = $query;
+        $this->command = $command;
+        $this->viewObject = $viewObject;
     }
 
     /**
-     * @return Info
+     * @return ViewObjectInterface
      */
-    public function getInfo(): Info
+    public function getResult(): ViewObjectInterface
     {
-        return $this->info;
+        return $this->result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTime(): string
+    {
+        return $this->time;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommand(): string
+    {
+        return $this->command;
+    }
+
+    /**
+     * @return string
+     */
+    public function getViewObject(): string
+    {
+        return $this->viewObject;
     }
 }
