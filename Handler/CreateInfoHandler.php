@@ -12,7 +12,11 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus\Handler;
 
 use Ferdyrurka\CommandBus\Command\CommandInterface;
+use Ferdyrurka\CommandBus\Factory\CreateInfoFactory;
 use Ferdyrurka\CommandBus\Repository\InfoRepositoryInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class CreateInfoHandler
@@ -39,6 +43,11 @@ class CreateInfoHandler implements HandlerInterface
      */
     public function handle(CommandInterface $command): void
     {
-        $this->infoRepository->create($command->getInfo());
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncode()]);
+        $serializeObject = $serializer->serialize($command->getResult(), 'json');
+
+        $createInfoFactory = new CreateInfoFactory($command, $serializeObject);
+
+        $this->infoRepository->create($createInfoFactory->createInfo());
     }
 }
