@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Entity;
 
+use Ferdyrurka\CommandBus\Util\Logger;
+
 /**
  * Class Info
  * @package Ferdyrurka\CommandBus\Entity
@@ -57,6 +59,14 @@ class Info
         $this->query = $query;
         $this->command = $command;
         $this->viewObject = $viewObject;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return Logger::INFO;
     }
 
     /**
