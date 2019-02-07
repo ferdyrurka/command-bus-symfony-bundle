@@ -45,20 +45,33 @@ class Info
     private $viewObject;
 
     /**
+     * @var integer
+     */
+    private $timeExecute;
+
+    /**
      * Info constructor.
      * @param string $result
      * @param string $time
      * @param string $query
      * @param string $command
      * @param string $viewObject
+     * @param int $timeExecute
      */
-    public function __construct(string $result, string $time, string $query, string $command, string $viewObject)
-    {
+    public function __construct(
+        string $result,
+        string $time,
+        string $query,
+        string $command,
+        string $viewObject,
+        int $timeExecute
+    ) {
         $this->result = $result;
         $this->time = $time;
         $this->query = $query;
         $this->command = $command;
         $this->viewObject = $viewObject;
+        $this->timeExecute = $timeExecute;
     }
 
     /**
@@ -78,27 +91,11 @@ class Info
     }
 
     /**
-     * @param string $result
-     */
-    public function setResult(string $result): void
-    {
-        $this->result = $result;
-    }
-
-    /**
      * @return string
      */
     public function getTime(): string
     {
         return $this->time;
-    }
-
-    /**
-     * @param string $time
-     */
-    public function setTime(string $time): void
-    {
-        $this->time = $time;
     }
 
     /**
@@ -110,27 +107,11 @@ class Info
     }
 
     /**
-     * @param string $query
-     */
-    public function setQuery(string $query): void
-    {
-        $this->query = $query;
-    }
-
-    /**
      * @return string
      */
     public function getCommand(): string
     {
         return $this->command;
-    }
-
-    /**
-     * @param string $command
-     */
-    public function setCommand(string $command): void
-    {
-        $this->command = $command;
     }
 
     /**
@@ -142,10 +123,10 @@ class Info
     }
 
     /**
-     * @param string $viewObject
+     * @return int
      */
-    public function setViewObject(string $viewObject): void
+    public function getTimeExecute(): int
     {
-        $this->viewObject = $viewObject;
+        return $this->timeExecute;
     }
 }

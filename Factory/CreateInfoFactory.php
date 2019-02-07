@@ -51,7 +51,8 @@ class CreateInfoFactory
             $this->createInfoCommand->getTime(),
             $this->createInfoCommand->getQuery(),
             $this->createInfoCommand->getCommand(),
-            $this->createInfoCommand->getViewObject()
+            $this->createInfoCommand->getViewObject(),
+            $this->createInfoCommand->getTimeExecute()
         );
     }
 }
