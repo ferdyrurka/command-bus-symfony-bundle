@@ -19,6 +19,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Mockery;
 
+/**
+ * Class DatabaseFactoryTest
+ * @package Ferdyrurka\CommandBus\Test\Factory
+ */
 class DatabaseFactoryTest extends TestCase
 {
     /**
@@ -26,6 +30,9 @@ class DatabaseFactoryTest extends TestCase
      */
     private $databaseFactory;
 
+    /**
+     *
+     */
     public function setUp(): void
     {
         $this->databaseFactory = new DatabaseFactory(
@@ -42,6 +49,10 @@ class DatabaseFactoryTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @throws InvalidArgsConfException
+     * @throws UndefinedDatabaseTypeException
+     */
     public function testGetDatabase(): void
     {
         $this->assertInstanceOf(
@@ -50,12 +61,20 @@ class DatabaseFactoryTest extends TestCase
         );
     }
 
+    /**
+     * @throws InvalidArgsConfException
+     * @throws UndefinedDatabaseTypeException
+     */
     public function testUndefinedKeyException(): void
     {
         $this->expectException(UndefinedDatabaseTypeException::class);
         $this->databaseFactory->getDatabase('NOT INDEX');
     }
 
+    /**
+     * @throws InvalidArgsConfException
+     * @throws UndefinedDatabaseTypeException
+     */
     public function testThrowConstructor(): void
     {
         $databaseFactory = new DatabaseFactory(
