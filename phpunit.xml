@@ -28,6 +28,7 @@
                 <directory>./Command</directory>
                 <directory>./Entity</directory>
                 <directory>./vendor</directory>
+                <directory>./Query</directory>
                 <directory>./Tests</directory>
                 <directory>./Repository</directory>
                 <file>./DependencyInjection/CommandBusSymfonyExtension.php</file>
