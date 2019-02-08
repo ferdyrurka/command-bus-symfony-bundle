@@ -43,7 +43,7 @@ Propose:
 
 Fix:
 
-* none
+* Multiply flush in ElasticSearchManager
 
 # v0.0.2-beta (17.01.2019)
 
