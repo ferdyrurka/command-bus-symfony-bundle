@@ -4,7 +4,7 @@ When you create query command, implements interface
 Ferdyrurka\CommandBus\Query\Command\QueryCommandInterface
 
 ```php
-namespace App\Command;
+namespace App\Query\Command;
 
 use Ferdyrurka\CommandBus\Query\Command\QueryCommandInterface;
 
