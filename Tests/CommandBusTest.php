@@ -49,14 +49,12 @@ class CommandBusTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->command = Mockery::mock(CommandInterface::class);
         $this->handler = Mockery::mock(HandlerInterface::class);
 
         $this->handlerNamespace = str_replace('Command', 'Handler', \get_class($this->command));
-
-        parent::setUp();
     }
 
     /**
