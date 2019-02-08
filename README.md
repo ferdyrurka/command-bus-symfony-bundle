@@ -40,6 +40,12 @@ php vendor/bin/phpunit
 * EventBus
 * Safe your data. Not worked MySQL, added command to queue and waited to save.
 
+## FAQ
+
+* Why not use Monolog?
+
+    * Because Monolog is not stable version for PHP 7.3 
+
 ## License 
 
 Open GPL v3 or later
