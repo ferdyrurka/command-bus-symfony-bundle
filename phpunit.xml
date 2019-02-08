@@ -26,7 +26,6 @@
             <exclude>
                 <directory>./Exception</directory>
                 <directory>./Command</directory>
-                <directory>./Handler</directory>
                 <directory>./Entity</directory>
                 <directory>./vendor</directory>
                 <directory>./Tests</directory>
