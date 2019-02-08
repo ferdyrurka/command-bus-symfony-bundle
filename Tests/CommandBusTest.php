@@ -76,9 +76,9 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key
+                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
+                        Parameters::PREFIX . '_handler_prefix' !== $key &&
+                        Parameters::PREFIX . '_save_command_bus_log' !== $key
                     ) {
                         return false;
                     }
@@ -122,9 +122,9 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key
+                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
+                        Parameters::PREFIX . '_handler_prefix' !== $key &&
+                        Parameters::PREFIX . '_save_command_bus_log' !== $key
                     ) {
                         return false;
                     }
@@ -151,8 +151,8 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key
+                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
+                        Parameters::PREFIX . '_handler_prefix' !== $key
                     ) {
                         return false;
                     }
@@ -174,9 +174,9 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key
+                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
+                        Parameters::PREFIX . '_handler_prefix' !== $key &&
+                        Parameters::PREFIX . '_save_command_bus_log' !== $key
                     ) {
                         return false;
                     }
@@ -202,9 +202,9 @@ class CommandBusTest extends TestCase
         $container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_name' !== $key &&
-                        Parameters::PREFIX . '_handler_name' !== $key &&
-                        Parameters::PREFIX . '_save_statistic_handler' !== $key
+                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
+                        Parameters::PREFIX . '_handler_prefix' !== $key &&
+                        Parameters::PREFIX . '_save_command_bus_log' !== $key
                     ) {
                         return false;
                     }

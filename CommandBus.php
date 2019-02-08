@@ -55,7 +55,7 @@ class CommandBus implements CommandBusInterface
             $this->handler = $this->getHandleFromCommand(\get_class($command));
             $this->handler->handle($command);
         } catch (Exception $exception) {
-            if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_statistic_handler')) {
+            if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_command_bus_log')) {
                 $this->saveLog($exception, \get_class($command));
             }
 
@@ -71,8 +71,8 @@ class CommandBus implements CommandBusInterface
     protected function getHandleFromCommand(string $commandNamespace): HandlerInterface
     {
         $handlerNamespace = str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_command_name'),
-            $this->container->getParameter(Parameters::PREFIX . '_handler_name'),
+            $this->container->getParameter(Parameters::PREFIX . '_command_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_handler_prefix'),
             $commandNamespace
         );
 
