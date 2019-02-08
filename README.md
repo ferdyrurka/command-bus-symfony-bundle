@@ -2,15 +2,17 @@
 
 This open-source package is ready to development for CQRS and DDD. 
 
-## Status build
+## Status build and coverage
 
 ### develop
 
 [![Build Status](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle.svg?branch=develop)](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle)
+[![Coverage Status](https://coveralls.io/repos/github/ferdyrurka/command-bus-symfony-bundle/badge.svg?branch=develop)](https://coveralls.io/github/ferdyrurka/command-bus-symfony-bundle?branch=develop)
 
 ### Current version (master)
 
 [![Build Status](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle.svg?branch=master)](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle)
+[![Coverage Status](https://coveralls.io/repos/github/ferdyrurka/command-bus-symfony-bundle/badge.svg?branch=master)](https://coveralls.io/github/ferdyrurka/command-bus-symfony-bundle?branch=master)
 
 ## Documentation
 
@@ -22,10 +24,6 @@ Documentation for CommandBus is in [click here](Resources/docs/index.md)
 * PHPUnit
 * Mockery
 * ElasticSearch
-
-## Coverage
-
-[![Coverage Status](https://coveralls.io/repos/github/ferdyrurka/command-bus-symfony-bundle/badge.svg)](https://coveralls.io/github/ferdyrurka/command-bus-symfony-bundle)
 
 ## Run tests
 
