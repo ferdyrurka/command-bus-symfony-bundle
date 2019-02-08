@@ -25,7 +25,7 @@ Documentation for CommandBus is in [click here](Resources/docs/index.md)
 
 ## Coverage
 
-[Look coverage raport](Resources/img/coverage.png)
+[![Coverage Status](https://coveralls.io/repos/github/ferdyrurka/command-bus-symfony-bundle/badge.svg)](https://coveralls.io/github/ferdyrurka/command-bus-symfony-bundle)
 
 ## Run tests
 
