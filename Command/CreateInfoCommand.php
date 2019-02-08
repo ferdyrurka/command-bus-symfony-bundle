@@ -45,7 +45,7 @@ class CreateInfoCommand implements CommandInterface
     private $viewObject;
 
     /**
-     * @var integer
+     * @var float
      */
     private $timeExecute;
 
@@ -56,6 +56,7 @@ class CreateInfoCommand implements CommandInterface
      * @param string $query
      * @param string $command
      * @param string $viewObject
+     * @param float $timeExecute
      */
     public function __construct(
         ViewObjectInterface $result,
@@ -63,7 +64,7 @@ class CreateInfoCommand implements CommandInterface
         string $query,
         string $command,
         string $viewObject,
-        int $timeExecute
+        float $timeExecute
     ) {
         $this->result = $result;
         $this->time = $time;
@@ -114,9 +115,9 @@ class CreateInfoCommand implements CommandInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTimeExecute(): int
+    public function getTimeExecute(): float
     {
         return $this->timeExecute;
     }

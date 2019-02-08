@@ -45,7 +45,7 @@ class Info
     private $viewObject;
 
     /**
-     * @var integer
+     * @var float
      */
     private $timeExecute;
 
@@ -56,7 +56,7 @@ class Info
      * @param string $query
      * @param string $command
      * @param string $viewObject
-     * @param int $timeExecute
+     * @param float $timeExecute
      */
     public function __construct(
         string $result,
@@ -64,7 +64,7 @@ class Info
         string $query,
         string $command,
         string $viewObject,
-        int $timeExecute
+        float $timeExecute
     ) {
         $this->result = $result;
         $this->time = $time;
@@ -123,9 +123,9 @@ class Info
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTimeExecute(): int
+    public function getTimeExecute(): float
     {
         return $this->timeExecute;
     }
