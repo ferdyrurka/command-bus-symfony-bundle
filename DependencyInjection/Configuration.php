@@ -32,26 +32,59 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
 
-                ->scalarNode('handler_name')
+                /**
+                 * Prefix
+                 */
+
+                ->scalarNode('handler_prefix')
                     ->isRequired()
                     ->defaultValue('Handler')
-                    ->validate('/^([A-Z|a-z|0-9| |-|\/]){0,1000}$/')
                     ->end()
 
-                ->scalarNode('command_name')
+                ->scalarNode('command_prefix')
                     ->isRequired()
                     ->defaultValue('Command')
-                    ->validate('/^([A-Z|a-z|0-9| |-|\/]){0,1000}$/')
                     ->end()
 
-                ->booleanNode('save_statistic_handler')
+
+                ->scalarNode('query_handler_prefix')
+                    ->isRequired()
+                    ->defaultValue('Handler')
+                    ->end()
+
+                ->scalarNode('query_command_prefix')
+                    ->isRequired()
+                    ->defaultValue('Command')
+                    ->end()
+
+                /**
+                 * Save logs and info
+                 */
+
+                ->booleanNode('save_command_bus_log')
                     ->isRequired()
                     ->defaultTrue()
                     ->end()
 
-                ->scalarNode('database_type')
-                    ->validate('/^(elasticsearch|)$/')
+                ->booleanNode('save_query_bus_log')
+                    ->isRequired()
+                    ->defaultTrue()
                     ->end()
+
+                ->booleanNode('save_query_bus_info')
+                    ->isRequired()
+                    ->defaultTrue()
+                    ->end()
+
+                /**
+                 * Databases type and connections
+                 */
+
+                ->scalarNode('database_type')
+                    ->validate()
+                        ->ifInArray(['elasticsearch'])
+                    ->end()
+                ->end()
 
                 ->arrayNode('connection')
 
@@ -65,11 +98,12 @@ class Configuration implements ConfigurationInterface
                                     ->defaultValue('elasticsearch')
                                     ->end()
                                 ->integerNode('port')
-                                    ->validate('/^([0-9]){0,5}$/')
                                     ->defaultValue('9200')
                                     ->end()
                                 ->scalarNode('scheme')
-                                    ->validate('/^(https|http)$/')
+                                    ->validate()
+                                        ->ifInArray(['http', 'https'])
+                                    ->end()
                                     ->defaultValue('https')
                                     ->end()
                                 ->scalarNode('index')
@@ -86,7 +120,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
 
             ->end()
-
         ;
 
         return $treeBuilder;
