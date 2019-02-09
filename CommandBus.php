@@ -96,10 +96,10 @@ class CommandBus implements CommandBusInterface
      */
     protected function saveLog(Exception $exception, string $commandNamespace) : void
     {
+        $handlerNamespace = '';
+
         if (\is_object($this->handler)) {
             $handlerNamespace = \get_class($this->handler);
-        } else {
-            $handlerNamespace = '';
         }
 
         $createLogCommand = new CreateLogCommand(
