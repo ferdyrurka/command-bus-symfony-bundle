@@ -9,9 +9,7 @@
 
 declare(strict_types=1);
 
-
 namespace Ferdyrurka\CommandBus\Entity;
-
 
 use Ferdyrurka\CommandBus\Util\Logger;
 
