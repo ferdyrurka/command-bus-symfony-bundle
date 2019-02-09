@@ -76,7 +76,7 @@ class Parameters
 
         $this->containerBuilder->setParameter(
             self::PREFIX . '_save_command_bus_log',
-            $this->configs['save_statistic_handler']
+            $this->configs['save_command_bus_log']
         );
 
         # QueryBus

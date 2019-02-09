@@ -43,6 +43,19 @@ class ParametersTest extends TestCase
     public function setUp(): void
     {
         $this->containerBuilder = Mockery::mock(ContainerBuilder::class);
+        $this->config = [
+            'handler_prefix' => '',
+            'command_prefix' => '',
+            'query_handler_prefix' => '',
+            'query_command_prefix' => '',
+            'save_command_bus_log' => false,
+            'save_query_bus_log' => false,
+            'save_query_bus_info' => false,
+            'database_type' => 'elasticsearch',
+            'connection' => [
+                'elasticsearch' => []
+            ]
+        ];
 
         parent::setUp();
     }
@@ -54,15 +67,7 @@ class ParametersTest extends TestCase
      */
     public function testSetParameters(): void
     {
-        $this->config = [
-            'handler_name' => '',
-            'command_name' => '',
-            'save_statistic_handler' => true,
-            'database_type' => 'elasticsearch',
-            'connection' => [
-                'elasticsearch' => []
-            ]
-        ];
+        $this->config['save_command_bus_log'] = true;
 
         $databaseInterface = Mockery::mock(DatabaseInterface::class);
         $databaseInterface->shouldReceive('setParameters')->once();
@@ -71,29 +76,7 @@ class ParametersTest extends TestCase
         $databaseFactory->shouldReceive('getDatabase')->once()
             ->withArgs([$this->config['database_type']])->andReturn($databaseInterface);
 
-        $this->containerBuilder->shouldReceive('setParameter')->times(3)
-            ->withArgs(
-                function (string $key, $value) {
-                    $prefix = Parameters::PREFIX;
-
-                    if ($key !== $prefix . '_handler_name' &&
-                        $key !== $prefix . '_command_name' &&
-                        $key !== $prefix . '_save_statistic_handler'
-                    ) {
-                        return false;
-                    }
-
-                    if ($value !== $this->config['handler_name'] &&
-                        $value !== $this->config['command_name'] &&
-                        $value !== $this->config['save_statistic_handler']
-                    ) {
-                        return false;
-                    }
-
-                    return true;
-                }
-            )
-        ;
+        $this->setContainerToRequiredParam();
 
         $parameters = new Parameters($this->containerBuilder, $this->config);
         $parameters->setParameters();
@@ -105,11 +88,7 @@ class ParametersTest extends TestCase
      */
     public function testNoStatistic(): void
     {
-        $this->config = [
-            'handler_name' => '',
-            'command_name' => '',
-            'save_statistic_handler' => false
-        ];
+        unset($this->config['connection'], $this->config['database_type']);
 
         $this->setContainerToRequiredParam();
 
@@ -123,11 +102,8 @@ class ParametersTest extends TestCase
      */
     public function testTypeDatabaseException(): void
     {
-        $this->config = [
-            'handler_name' => '',
-            'command_name' => '',
-            'save_statistic_handler' => true
-        ];
+        $this->config['save_query_bus_info'] = true;
+        unset($this->config['database_type']);
 
         $this->setContainerToRequiredParam();
 
@@ -142,23 +118,30 @@ class ParametersTest extends TestCase
      */
     private function setContainerToRequiredParam(): void
     {
-        $this->containerBuilder->shouldReceive('setParameter')->times(3)
+        $this->containerBuilder->shouldReceive('setParameter')->times(7)
             ->withArgs(
                 function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
-                    if ($key !== $prefix . '_handler_name' &&
-                        $key !== $prefix . '_command_name' &&
-                        $key !== $prefix . '_save_statistic_handler'
+                    if ($key !== $prefix . '_handler_prefix' &&
+                        $key !== $prefix . '_command_prefix' &&
+                        $key !== $prefix . '_query_handler_prefix' &&
+                        $key !== $prefix . '_query_command_prefix' &&
+                        $key !== $prefix . '_save_command_bus_log' &&
+                        $key !== $prefix . '_save_query_bus_log' &&
+                        $key !== $prefix . '_save_query_bus_info'
                     ) {
                         return false;
                     }
 
-                    if ($value !== $this->config['handler_name'] &&
-                        $value !== $this->config['command_name'] &&
-                        $value !== $this->config['save_statistic_handler']
+                    if ($value !== $this->config['handler_prefix'] &&
+                        $value !== $this->config['command_prefix'] &&
+                        $value !== $this->config['query_handler_prefix'] &&
+                        $value !== $this->config['query_command_prefix'] &&
+                        $value !== $this->config['save_command_bus_log'] &&
+                        $value !== $this->config['save_query_bus_log'] &&
+                        $value !== $this->config['save_query_bus_info']
                     ) {
-                        echo $this->config['save_statistic_handler'];
                         return false;
                     }
 
