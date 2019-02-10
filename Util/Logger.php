@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Util;
 
+use Ferdyrurka\CommandBus\Exception\FerdyrurkaCommandBusException;
+
 /**
  * Class Logger
  * @package Ferdyrurka\CommandBus\Util
@@ -19,4 +21,21 @@ class Logger
 {
     public const LOG = 500;
     public const INFO = 200;
+
+    /**
+     * @param int $loggerType
+     * @return string
+     * @throws FerdyrurkaCommandBusException
+     */
+    public function constToName(int $loggerType): string
+    {
+        switch ($loggerType) {
+            case 500:
+                return 'log';
+            case 200:
+                return 'info';
+            default:
+                throw new FerdyrurkaCommandBusException('Undefined type logger!');
+        }
+    }
 }
