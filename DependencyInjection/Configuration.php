@@ -37,23 +37,19 @@ class Configuration implements ConfigurationInterface
                  */
 
                 ->scalarNode('handler_prefix')
-                    ->isRequired()
                     ->defaultValue('Handler')
                     ->end()
 
                 ->scalarNode('command_prefix')
-                    ->isRequired()
                     ->defaultValue('Command')
                     ->end()
 
 
                 ->scalarNode('query_handler_prefix')
-                    ->isRequired()
                     ->defaultValue('Handler')
                     ->end()
 
                 ->scalarNode('query_command_prefix')
-                    ->isRequired()
                     ->defaultValue('Command')
                     ->end()
 
@@ -62,17 +58,14 @@ class Configuration implements ConfigurationInterface
                  */
 
                 ->booleanNode('save_command_bus_log')
-                    ->isRequired()
                     ->defaultTrue()
                     ->end()
 
                 ->booleanNode('save_query_bus_log')
-                    ->isRequired()
                     ->defaultTrue()
                     ->end()
 
                 ->booleanNode('save_query_bus_info')
-                    ->isRequired()
                     ->defaultTrue()
                     ->end()
 
