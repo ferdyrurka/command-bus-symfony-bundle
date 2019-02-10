@@ -45,11 +45,11 @@ final class ReflectionEntity implements ReflectionEntityInterface
         foreach ($reflection->getMethods() as $method) {
             $nameMethod = $method->getName();
 
-            if (strpos($nameMethod,'get') === false) {
+            if (strpos($nameMethod, 'get') === false) {
                 continue;
             }
 
-            $gettersInArray[lcfirst(str_ireplace('get','', $nameMethod))] = $this->entity->$nameMethod();
+            $gettersInArray[lcfirst(str_ireplace('get', '', $nameMethod))] = $this->entity->$nameMethod();
         }
 
         return $gettersInArray;
