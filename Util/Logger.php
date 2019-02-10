@@ -30,9 +30,9 @@ class Logger
     public function constToName(int $loggerType): string
     {
         switch ($loggerType) {
-            case 500:
+            case self::LOG:
                 return 'log';
-            case 200:
+            case self::INFO:
                 return 'info';
             default:
                 throw new FerdyrurkaCommandBusException('Undefined type logger!');
