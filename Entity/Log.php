@@ -17,7 +17,7 @@ use Ferdyrurka\CommandBus\Util\Logger;
  * Class Log
  * @package Ferdyrurka\CommandBus\Entity
  */
-class Log
+class Log implements EntityInterface
 {
     /**
      * @var string
