@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus\Manager;
 
+use Ferdyrurka\CommandBus\Entity\EntityInterface;
+
 /**
  * Interface ManagerInterface
  * @package Ferdyrurka\CommandBus\Manager
@@ -18,9 +20,9 @@ namespace Ferdyrurka\CommandBus\Manager;
 interface ManagerInterface
 {
     /**
-     * @param object $entity
+     * @param EntityInterface $entity
      */
-    public function persist(object $entity): void;
+    public function persist(EntityInterface $entity): void;
 
     /**
      *
