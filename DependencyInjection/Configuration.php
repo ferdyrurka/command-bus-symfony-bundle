@@ -32,10 +32,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
 
-                /**
-                 * Prefix
-                 */
-
                 ->scalarNode('handler_prefix')
                     ->defaultValue('Handler')
                     ->end()
@@ -53,10 +49,6 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('Command')
                     ->end()
 
-                /**
-                 * Save logs and info
-                 */
-
                 ->booleanNode('save_command_bus_log')
                     ->defaultTrue()
                     ->end()
@@ -68,10 +60,6 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('save_query_bus_info')
                     ->defaultTrue()
                     ->end()
-
-                /**
-                 * Databases type and connections
-                 */
 
                 ->scalarNode('database_type')
                     ->validate()
