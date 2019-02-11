@@ -9,9 +9,8 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Query;
+namespace Ferdyrurka\CommandBus\Query\Handler;
 
-use Ferdyrurka\CommandBus\Query\Command\QueryCommandInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 
 /**
@@ -21,8 +20,7 @@ use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 interface QueryInterface
 {
     /**
-     * @param QueryCommandInterface $queryCommand
      * @return ViewObjectInterface
      */
-    public function handle(QueryCommandInterface $queryCommand): ViewObjectInterface;
+    public function handle(): ViewObjectInterface;
 }
