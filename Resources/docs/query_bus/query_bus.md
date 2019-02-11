@@ -11,8 +11,8 @@ class HomeController
 {
     public function checkExistUserAction(QueryBusInterface $queryBus): array 
     {
-        $command = new FindUserCommand(13);
-        $viewObject = $queryBus->handle($command);
+        $handler = new FindUserHandler(13);
+        $viewObject = $queryBus->handle($handler);
         
         return ['data_user' => $viewObject];
     }

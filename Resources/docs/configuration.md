@@ -22,15 +22,6 @@ command_bus_symfony:
         # Default: Command
         # Is required
     command_prefix: 'your_command_prefix'
-    
-    #### QueryBus
-        # Default: Handler
-        # Is required
-    query_handler_prefix: 'your_handler_prefix'
-    
-        # Default: Command
-        # Is required
-    query_command_prefix: 'your_command_prefix'
   
     # Do you want to save data from the execution of the trader
     
@@ -43,12 +34,6 @@ command_bus_symfony:
         # Default: true
         # Is required
     save_query_bus_log: true
-    
-    # Save results query
-        # QueryBus
-        # Default: true
-        # Is required
-    save_query_bus_info: true
    
     # Required if save_statistic_handler: true
     # elasticsearch
