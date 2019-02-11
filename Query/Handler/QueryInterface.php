@@ -15,10 +15,10 @@ use Ferdyrurka\CommandBus\Query\Command\QueryCommandInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 
 /**
- * Interface QueryHandlerInterface
+ * Interface QueryInterface
  * @package Ferdyrurka\CommandBus\Query
  */
-interface QueryHandlerInterface
+interface QueryInterface
 {
     /**
      * @param QueryCommandInterface $queryCommand
