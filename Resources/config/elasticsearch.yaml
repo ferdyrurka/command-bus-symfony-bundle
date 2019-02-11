@@ -14,13 +14,6 @@ services:
 
   # Repository
 
-  Ferdyrurka\CommandBus\Repository\InfoRepositoryInterface:
-    class: 'Ferdyrurka\CommandBus\Repository\InfoRepository'
-    public: true
-    autowire: false
-    arguments:
-      - '@Ferdyrurka\CommandBus\Manager\ElasticSearch\ElasticSearchManager'
-
   Ferdyrurka\CommandBus\Repository\LogRepositoryInterface:
     class: 'Ferdyrurka\CommandBus\Repository\LogRepository'
     public: true
@@ -32,11 +25,6 @@ services:
 
   Ferdyrurka\CommandBus\Handler\CreateLogHandler:
     class: 'Ferdyrurka\CommandBus\Handler\CreateLogHandler'
-    autowire: true
-    public: true
-
-  Ferdyrurka\CommandBus\Handler\CreateInfoHandler:
-    class: 'Ferdyrurka\CommandBus\Handler\CreateInfoHandler'
     autowire: true
     public: true
 
