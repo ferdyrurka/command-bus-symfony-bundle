@@ -13,8 +13,8 @@ namespace Ferdyrurka\CommandBus\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Class CommandBusSymfonyExtension
@@ -34,7 +34,7 @@ final class CommandBusSymfonyExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
 
-        if ((bool) $config['save_statistic_handler']) {
+        if ((bool) $config['save_command_bus_log'] || (bool) $config['save_query_bus_log']) {
             $loader = new YamlFileLoader(
                 $container,
                 new FileLocator(__DIR__ . '/../Resources/config')
