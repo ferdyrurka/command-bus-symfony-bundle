@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Ferdyrurka\CommandBus\Repository;
 
 use Ferdyrurka\CommandBus\Entity\Log;
-use Ferdyrurka\CommandBus\Manager\ElasticSearch\ManagerInterface;
+use Ferdyrurka\CommandBus\Manager\ManagerInterface;
 
 /**
  * Class LogRepository
