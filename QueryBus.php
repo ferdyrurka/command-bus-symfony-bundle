@@ -16,8 +16,8 @@ use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Query\Handler\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
-use Symfony\Component\DependencyInjection\Container;
 use \Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class QueryBus
@@ -26,7 +26,7 @@ use \Exception;
 class QueryBus implements QueryBusInterface
 {
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -37,9 +37,9 @@ class QueryBus implements QueryBusInterface
 
     /**
      * QueryBus constructor.
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

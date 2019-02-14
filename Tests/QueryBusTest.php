@@ -20,7 +20,7 @@ use Ferdyrurka\CommandBus\QueryBus;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Exception;
 
 /**
@@ -32,7 +32,7 @@ class QueryBusTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -52,7 +52,7 @@ class QueryBusTest extends TestCase
     public function setUp(): void
     {
         $this->handler = Mockery::mock(QueryInterface::class);
-        $this->container = Mockery::mock(Container::class);
+        $this->container = Mockery::mock(ContainerInterface::class);
         $this->queryBus = new QueryBus($this->container);
     }
 
