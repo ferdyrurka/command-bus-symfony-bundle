@@ -50,7 +50,8 @@ class Configuration implements ConfigurationInterface
 
                 ->scalarNode('database_type')
                     ->validate()
-                        ->ifInArray(['elasticsearch'])
+                        ->ifNotInArray(['elasticsearch', null])
+                        ->thenInvalid('Invalid database driver %s')
                     ->end()
                 ->end()
 
@@ -70,7 +71,10 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                 ->scalarNode('scheme')
                                     ->validate()
-                                        ->ifInArray(['http', 'https'])
+                                        ->ifNotInArray(['http', 'https'])
+                                        ->thenInvalid('
+                                            Invalid scheme %s, only use http or https. Default value is https
+                                        ')
                                     ->end()
                                     ->defaultValue('https')
                                     ->end()
