@@ -118,29 +118,23 @@ class ParametersTest extends TestCase
      */
     private function setContainerToRequiredParam(): void
     {
-        $this->containerBuilder->shouldReceive('setParameter')->times(7)
+        $this->containerBuilder->shouldReceive('setParameter')->times(4)
             ->withArgs(
                 function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
                     if ($key !== $prefix . '_handler_prefix' &&
                         $key !== $prefix . '_command_prefix' &&
-                        $key !== $prefix . '_query_handler_prefix' &&
-                        $key !== $prefix . '_query_command_prefix' &&
                         $key !== $prefix . '_save_command_bus_log' &&
-                        $key !== $prefix . '_save_query_bus_log' &&
-                        $key !== $prefix . '_save_query_bus_info'
+                        $key !== $prefix . '_save_query_bus_log'
                     ) {
                         return false;
                     }
 
                     if ($value !== $this->config['handler_prefix'] &&
                         $value !== $this->config['command_prefix'] &&
-                        $value !== $this->config['query_handler_prefix'] &&
-                        $value !== $this->config['query_command_prefix'] &&
                         $value !== $this->config['save_command_bus_log'] &&
-                        $value !== $this->config['save_query_bus_log'] &&
-                        $value !== $this->config['save_query_bus_info']
+                        $value !== $this->config['save_query_bus_log']
                     ) {
                         return false;
                     }
