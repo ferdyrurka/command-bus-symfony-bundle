@@ -46,11 +46,8 @@ class ParametersTest extends TestCase
         $this->config = [
             'handler_prefix' => '',
             'command_prefix' => '',
-            'query_handler_prefix' => '',
-            'query_command_prefix' => '',
             'save_command_bus_log' => false,
             'save_query_bus_log' => false,
-            'save_query_bus_info' => false,
             'database_type' => 'elasticsearch',
             'connection' => [
                 'elasticsearch' => []
@@ -102,7 +99,7 @@ class ParametersTest extends TestCase
      */
     public function testTypeDatabaseException(): void
     {
-        $this->config['save_query_bus_info'] = true;
+        $this->config['save_query_bus_log'] = true;
         unset($this->config['database_type']);
 
         $this->setContainerToRequiredParam();

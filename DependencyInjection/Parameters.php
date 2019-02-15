@@ -57,8 +57,7 @@ class Parameters
         $this->setRequiredParameters();
 
         if ((boolean) $this->configs['save_command_bus_log'] ||
-            (boolean) $this->configs['save_query_bus_log'] ||
-            (boolean) $this->configs['save_query_bus_info']
+            (boolean) $this->configs['save_query_bus_log']
         ) {
             $this->setTypeDatabase();
         }
