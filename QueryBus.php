@@ -13,8 +13,10 @@ namespace Ferdyrurka\CommandBus;
 
 use Ferdyrurka\CommandBus\Command\CreateLogCommand;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
+use Ferdyrurka\CommandBus\Exception\QueryHandlerNotFoundException;
 use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
-use Ferdyrurka\CommandBus\Query\Handler\QueryInterface;
+use Ferdyrurka\CommandBus\Query\Handler\QueryHandlerInterface;
+use Ferdyrurka\CommandBus\Query\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 use \Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -45,19 +47,20 @@ class QueryBus implements QueryBusInterface
     }
 
     /**
-     * @param QueryInterface $handler
+     * @param QueryInterface $query
      * @return ViewObjectInterface
+     * @throws QueryHandlerNotFoundException
      * @throws Exception
      */
-    public function handle(QueryInterface $handler): ViewObjectInterface
+    public function handle(QueryInterface $query): ViewObjectInterface
     {
-        $this->handler = $handler;
+        $this->handler = $this->getQueryHandlerFromCommand(\get_class($query));
 
         try {
-            $queryResult = $this->handler->handle();
+            $queryResult = $this->handler->handle($query);
         } catch (Exception $exception) {
             if ($this->container->getParameter(Parameters::PREFIX . '_save_query_bus_log')) {
-                $this->saveLog($exception);
+                $this->saveLog($exception, \get_class($query));
             }
 
             throw $exception;
@@ -67,10 +70,39 @@ class QueryBus implements QueryBusInterface
     }
 
     /**
+     * @param string $queryNamespace
+     * @return QueryHandlerInterface
+     * @throws QueryHandlerNotFoundException
+     */
+    protected function getQueryHandlerFromCommand(string $queryNamespace) : QueryHandlerInterface
+    {
+        $handlerNamespace = str_replace(
+            $this->container->getParameter(Parameters::PREFIX . '_query_command_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
+            $queryNamespace
+        );
+
+        if (!$this->container->has($handlerNamespace)) {
+            throw new QueryHandlerNotFoundException('Query Handler not found by namespace: ' . $handlerNamespace);
+        }
+
+        $handler = $this->container->get($handlerNamespace);
+
+        if (!$handler instanceof QueryHandlerInterface) {
+            throw new QueryHandlerNotFoundException(
+                'Object not implements QueryHandlerInterface: ' . $handlerNamespace
+            );
+        }
+
+        return $handler;
+    }
+
+    /**
      * @param Exception $exception
+     * @param string $queryNamespace
      * @throws Exception
      */
-    protected function saveLog(Exception $exception): void
+    protected function saveLog(Exception $exception, string $queryNamespace): void
     {
         $handlerNamespace = '';
 
@@ -82,7 +114,7 @@ class QueryBus implements QueryBusInterface
             $exception->getMessage(),
             $exception->getLine(),
             \get_class($exception),
-            '',
+            $queryNamespace,
             $handlerNamespace
         );
 
