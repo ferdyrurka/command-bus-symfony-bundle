@@ -81,6 +81,12 @@ class Parameters
         # QueryBus
 
         $this->containerBuilder->setParameter(
+            self::PREFIX . '_query_handler_prefix',
+            $this->configs['query_handler_prefix']
+        );
+        $this->containerBuilder->setParameter(self::PREFIX . '_query_prefix', $this->configs['query_prefix']);
+
+        $this->containerBuilder->setParameter(
             self::PREFIX . '_save_query_bus_log',
             $this->configs['save_query_bus_log']
         );
