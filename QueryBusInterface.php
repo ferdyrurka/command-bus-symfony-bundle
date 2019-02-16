@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Ferdyrurka\CommandBus;
 
-use Ferdyrurka\CommandBus\Query\Handler\QueryInterface;
+use Ferdyrurka\CommandBus\Query\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 
 /**
