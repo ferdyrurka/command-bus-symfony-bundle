@@ -40,6 +40,14 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('Command')
                     ->end()
 
+                ->scalarNode('query_handler_prefix')
+                    ->defaultValue('Handler')
+                    ->end()
+
+                ->scalarNode('query_prefix')
+                    ->defaultValue('Command')
+                    ->end()
+
                 ->booleanNode('save_command_bus_log')
                     ->defaultTrue()
                     ->end()
