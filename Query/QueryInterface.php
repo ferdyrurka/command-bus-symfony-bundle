@@ -9,9 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Query\Handler;
-
-use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
+namespace Ferdyrurka\CommandBus\Query;
 
 /**
  * Interface QueryInterface
@@ -19,8 +17,5 @@ use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
  */
 interface QueryInterface
 {
-    /**
-     * @return ViewObjectInterface
-     */
-    public function handle(): ViewObjectInterface;
+
 }
