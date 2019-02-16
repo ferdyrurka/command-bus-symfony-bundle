@@ -22,6 +22,14 @@ command_bus_symfony:
         # Default: Command
         # Is required
     command_prefix: 'your_command_prefix'
+    
+        # Default: Command
+        # Is required
+    query_prefix: 'your_query_prefix'
+  
+        # Default: Command
+        # Is required
+    query_handler_prefix: 'your_query_handler_prefix'
   
     # Do you want to save data from the execution of the trader
     
