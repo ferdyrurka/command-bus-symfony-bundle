@@ -13,7 +13,7 @@ In composer.json add:
         }
     ],
     "require": {
-        "ferdyrurka/command-bus-symfony-bundle": "0.0.1-alpha"
+        "ferdyrurka/command-bus-symfony-bundle": "0.0.3"
     }
 }
 ```

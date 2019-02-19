@@ -14,9 +14,9 @@ namespace Ferdyrurka\CommandBus\Test\Manager;
 use Elasticsearch\Client;
 use Ferdyrurka\CommandBus\Entity\Log;
 use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
-use Ferdyrurka\CommandBus\Manager\ElasticSearchManager;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
+use Ferdyrurka\CommandBus\Manager\ElasticSearch\ElasticSearchManager;
+use Ferdyrurka\CommandBus\Connection\ElasticSearch\ElasticSearchConnection;
+use Ferdyrurka\CommandBus\Util\ReflectionEntity;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 
@@ -38,11 +38,16 @@ class ElasticSearchManagerTest extends TestCase
      */
     private $esManager;
 
-    public function setUp()
+    /**
+     * @var Log
+     */
+    private $log;
+
+    public function setUp(): void
     {
         $this->esConnection = Mockery::mock(ElasticSearchConnection::class);
         $this->esManager = new ElasticSearchManager($this->esConnection);
-        parent::setUp();
+        $this->log = Mockery::mock(Log::class);
     }
 
     /**
@@ -51,7 +56,7 @@ class ElasticSearchManagerTest extends TestCase
     public function testPersist(): void
     {
         $this->esConnection->shouldReceive('getClient')->never();
-        $this->esManager->persist(Mockery::mock(Log::class));
+        $this->esManager->persist($this->log);
     }
 
     /**
@@ -64,7 +69,7 @@ class ElasticSearchManagerTest extends TestCase
             function (array $args) : bool {
                 if ($args['body']['exception'] !== '\Exception'||
                     $args['index'] !== 'my-index' ||
-                    $args['type'] !== 'command-bus'
+                    $args['type'] !== 'log'
                 ) {
                     return false;
                 }
@@ -80,7 +85,9 @@ class ElasticSearchManagerTest extends TestCase
         $reflectionEntity->shouldReceive('__construct')->withArgs([Log::class])->once();
         $reflectionEntity->shouldReceive('getGettersEntity')->once()->andReturn(['exception' => '\Exception']);
 
-        $this->esManager->persist(Mockery::mock(Log::class));
+        $this->log->shouldReceive('getType')->once()->andReturn(500);
+
+        $this->esManager->persist($this->log);
         $this->esManager->flush();
     }
 
@@ -97,7 +104,7 @@ class ElasticSearchManagerTest extends TestCase
                         $args['body']['exception'] !== '\FerdyrurkaException'
                     ) ||
                     $args['index'] !== 'my-index' ||
-                    $args['type'] !== 'command-bus'
+                    $args['type'] !== 'log'
                 ) {
                     return false;
                 }
@@ -115,8 +122,10 @@ class ElasticSearchManagerTest extends TestCase
             ->andReturn(['exception' => '\Exception'], ['exception' => '\FerdyrurkaException'])
         ;
 
-        $this->esManager->persist(Mockery::mock(Log::class));
-        $this->esManager->persist(Mockery::mock(Log::class));
+        $this->log->shouldReceive('getType')->times(2)->andReturn(500);
+
+        $this->esManager->persist($this->log);
+        $this->esManager->persist($this->log);
         $this->esManager->flush();
     }
 
@@ -135,7 +144,8 @@ class ElasticSearchManagerTest extends TestCase
         $reflectionEntity->shouldReceive('__construct')->withArgs([Log::class])->once();
         $reflectionEntity->shouldReceive('getGettersEntity')->once()->andReturn([]);
 
-        $this->esManager->persist(Mockery::mock(Log::class));
+        $this->log->shouldReceive('getType')->once()->andReturn(500);
+        $this->esManager->persist($this->log);
 
         $this->expectException(EmptyEntityException::class);
         $this->esManager->flush();

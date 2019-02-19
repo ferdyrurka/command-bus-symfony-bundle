@@ -9,15 +9,15 @@
 
 declare(strict_types=1);
 
-
 namespace Ferdyrurka\CommandBus\Entity;
 
+use Ferdyrurka\CommandBus\Util\Logger;
 
 /**
  * Class Log
  * @package Ferdyrurka\CommandBus\Entity
  */
-class Log
+class Log implements EntityInterface
 {
     /**
      * @var string
@@ -72,6 +72,14 @@ class Log
         $this->exception = $exception;
         $this->command = $command;
         $this->handler = $handler;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return Logger::LOG;
     }
 
     /**

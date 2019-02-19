@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Util\ElasticSearch;
+namespace Ferdyrurka\CommandBus\Util;
 
 /**
  * Interface ReflectionEntityInterface

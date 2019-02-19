@@ -13,22 +13,35 @@ command_bus_symfony.yaml
 ```yaml
 command_bus_symfony:
 
-    # Name dirs
-  
-    # Default: Handler
-    # Is required
-    # Example 'Handlers' real path to search: 'src/Handlers'
-    handler_name: 'your_name_folder_handler'  
-    # Default: Command
-    # Is required
-    # Example 'Commands' real path to search: 'src/Commands'
-    command_name: 'your_name_folder_command'
+    #### CommandBus
     
+        # Default: Handler
+        # Is required
+    handler_prefix: 'your_handler_prefix'
+      
+        # Default: Command
+        # Is required
+    command_prefix: 'your_command_prefix'
+    
+        # Default: Command
+        # Is required
+    query_prefix: 'your_query_prefix'
+  
+        # Default: Command
+        # Is required
+    query_handler_prefix: 'your_query_handler_prefix'
+  
     # Do you want to save data from the execution of the trader
-    # Is required
+    
     # Save only all throws
-      # Messages, name, path etc.
-    save_statistic_handler: true
+        # CommandBus
+        # Default: true
+        # Is required
+    save_command_bus_log: true
+        # QueryBus
+        # Default: true
+        # Is required
+    save_query_bus_log: true
    
     # Required if save_statistic_handler: true
     # elasticsearch

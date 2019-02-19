@@ -54,27 +54,12 @@ class CommandBus implements CommandBusInterface
         try {
             $this->handler = $this->getHandleFromCommand(\get_class($command));
             $this->handler->handle($command);
-        } catch (Exception $e) {
-            if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_statistic_handler')) {
-                if (\is_object($this->handler)) {
-                    $handlerNamespace = \get_class($this->handler);
-                } else {
-                    $handlerNamespace = '';
-                }
-
-                $createLogCommand = new CreateLogCommand(
-                    $e->getMessage(),
-                    $e->getLine(),
-                    \get_class($e),
-                    \get_class($command),
-                    $handlerNamespace
-                );
-
-                $createLogHandler = $this->container->get(CreateLogHandler::class);
-                $createLogHandler->handle($createLogCommand);
+        } catch (Exception $exception) {
+            if ((bool) $this->container->getParameter(Parameters::PREFIX . '_save_command_bus_log')) {
+                $this->saveLog($exception, \get_class($command));
             }
 
-            throw $e;
+            throw $exception;
         }
     }
 
@@ -86,8 +71,8 @@ class CommandBus implements CommandBusInterface
     protected function getHandleFromCommand(string $commandNamespace): HandlerInterface
     {
         $handlerNamespace = str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_command_name'),
-            $this->container->getParameter(Parameters::PREFIX . '_handler_name'),
+            $this->container->getParameter(Parameters::PREFIX . '_command_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_handler_prefix'),
             $commandNamespace
         );
 
@@ -102,5 +87,30 @@ class CommandBus implements CommandBusInterface
         }
 
         return $handler;
+    }
+
+    /**
+     * @param Exception $exception
+     * @param string $commandNamespace
+     * @throws Exception
+     */
+    protected function saveLog(Exception $exception, string $commandNamespace) : void
+    {
+        $handlerNamespace = '';
+
+        if (\is_object($this->handler)) {
+            $handlerNamespace = \get_class($this->handler);
+        }
+
+        $createLogCommand = new CreateLogCommand(
+            $exception->getMessage(),
+            $exception->getLine(),
+            \get_class($exception),
+            $commandNamespace,
+            $handlerNamespace
+        );
+
+        $createLogHandler = $this->container->get(CreateLogHandler::class);
+        $createLogHandler->handle($createLogCommand);
     }
 }

@@ -32,23 +32,36 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
 
-                ->scalarNode('handler_name')
-                    ->isRequired()
+                ->scalarNode('handler_prefix')
                     ->defaultValue('Handler')
                     ->end()
 
-                ->scalarNode('command_name')
-                    ->isRequired()
+                ->scalarNode('command_prefix')
                     ->defaultValue('Command')
                     ->end()
 
-                ->booleanNode('save_statistic_handler')
-                    ->isRequired()
+                ->scalarNode('query_handler_prefix')
+                    ->defaultValue('QueryHandler')
+                    ->end()
+
+                ->scalarNode('query_prefix')
+                    ->defaultValue('Query')
+                    ->end()
+
+                ->booleanNode('save_command_bus_log')
+                    ->defaultTrue()
+                    ->end()
+
+                ->booleanNode('save_query_bus_log')
                     ->defaultTrue()
                     ->end()
 
                 ->scalarNode('database_type')
+                    ->validate()
+                        ->ifNotInArray(['elasticsearch', null])
+                        ->thenInvalid('Invalid database driver %s')
                     ->end()
+                ->end()
 
                 ->arrayNode('connection')
 
@@ -65,6 +78,12 @@ class Configuration implements ConfigurationInterface
                                     ->defaultValue('9200')
                                     ->end()
                                 ->scalarNode('scheme')
+                                    ->validate()
+                                        ->ifNotInArray(['http', 'https'])
+                                        ->thenInvalid('
+                                            Invalid scheme %s, only use http or https. Default value is https
+                                        ')
+                                    ->end()
                                     ->defaultValue('https')
                                     ->end()
                                 ->scalarNode('index')
@@ -81,7 +100,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
 
             ->end()
-
         ;
 
         return $treeBuilder;

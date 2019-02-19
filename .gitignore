@@ -2,10 +2,6 @@
 composer.lock
 /coverage/
 
-# Files
-
-phpunit.xml
-
 # IDE
 
 .idea

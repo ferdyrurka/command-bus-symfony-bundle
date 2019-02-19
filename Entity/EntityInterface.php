@@ -9,23 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Manager;
-
-use Ferdyrurka\CommandBus\Entity\EntityInterface;
+namespace Ferdyrurka\CommandBus\Entity;
 
 /**
- * Interface ManagerInterface
- * @package Ferdyrurka\CommandBus\Manager
+ * Interface EntityInterface
+ * @package Ferdyrurka\CommandBus\Entity
  */
-interface ManagerInterface
+interface EntityInterface
 {
     /**
-     * @param EntityInterface $entity
+     * @return int
      */
-    public function persist(EntityInterface $entity): void;
-
-    /**
-     *
-     */
-    public function flush(): void;
+    public function getType(): int;
 }

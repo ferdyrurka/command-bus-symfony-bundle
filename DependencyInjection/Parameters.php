@@ -56,7 +56,9 @@ class Parameters
     {
         $this->setRequiredParameters();
 
-        if ((boolean) $this->configs['save_statistic_handler']) {
+        if ((boolean) $this->configs['save_command_bus_log'] ||
+            (boolean) $this->configs['save_query_bus_log']
+        ) {
             $this->setTypeDatabase();
         }
     }
@@ -66,11 +68,27 @@ class Parameters
      */
     private function setRequiredParameters(): void
     {
-        $this->containerBuilder->setParameter(self::PREFIX . '_handler_name', $this->configs['handler_name']);
-        $this->containerBuilder->setParameter(self::PREFIX . '_command_name', $this->configs['command_name']);
+        # CommandBus
+
+        $this->containerBuilder->setParameter(self::PREFIX . '_handler_prefix', $this->configs['handler_prefix']);
+        $this->containerBuilder->setParameter(self::PREFIX . '_command_prefix', $this->configs['command_prefix']);
+
         $this->containerBuilder->setParameter(
-            self::PREFIX . '_save_statistic_handler',
-            $this->configs['save_statistic_handler']
+            self::PREFIX . '_save_command_bus_log',
+            $this->configs['save_command_bus_log']
+        );
+
+        # QueryBus
+
+        $this->containerBuilder->setParameter(
+            self::PREFIX . '_query_handler_prefix',
+            $this->configs['query_handler_prefix']
+        );
+        $this->containerBuilder->setParameter(self::PREFIX . '_query_prefix', $this->configs['query_prefix']);
+
+        $this->containerBuilder->setParameter(
+            self::PREFIX . '_save_query_bus_log',
+            $this->configs['save_query_bus_log']
         );
     }
 

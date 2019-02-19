@@ -9,12 +9,15 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Manager;
+namespace Ferdyrurka\CommandBus\Manager\ElasticSearch;
 
 use Elasticsearch\Client;
+use Ferdyrurka\CommandBus\Entity\EntityInterface;
 use Ferdyrurka\CommandBus\Exception\EmptyEntityException;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ReflectionEntity;
+use Ferdyrurka\CommandBus\Manager\ManagerInterface;
+use Ferdyrurka\CommandBus\Connection\ElasticSearch\ElasticSearchConnection;
+use Ferdyrurka\CommandBus\Util\Logger;
+use Ferdyrurka\CommandBus\Util\ReflectionEntity;
 
 /**
  * Class ElasticSearchManager
@@ -40,7 +43,7 @@ class ElasticSearchManager implements ManagerInterface
     /**
      * @var array
      */
-    protected $persists;
+    protected $persists = [];
 
     /**
      * ElasticSearchManager constructor.
@@ -52,15 +55,16 @@ class ElasticSearchManager implements ManagerInterface
     }
 
     /**
-     * @param object $entity
+     * @param EntityInterface $entity
      */
-    public function persist(object $entity): void
+    public function persist(EntityInterface $entity): void
     {
         $this->persists[] = $entity;
     }
 
     /**
      * @throws EmptyEntityException
+     * @throws \Ferdyrurka\CommandBus\Exception\FerdyrurkaCommandBusException
      * @throws \ReflectionException
      */
     public function flush(): void
@@ -70,7 +74,10 @@ class ElasticSearchManager implements ManagerInterface
             $this->index = $this->elasticSearchConnection->getIndex();
         }
 
-        foreach ($this->persists as $persist) {
+        foreach ($this->persists as $key => $persist) {
+            $logger = new Logger();
+            $type =  $logger->constToName($persist->getType());
+
             $reflectionEntity = new ReflectionEntity($persist);
             $body = $reflectionEntity->getGettersEntity();
 
@@ -80,9 +87,11 @@ class ElasticSearchManager implements ManagerInterface
 
             $this->client->index([
                 'index' => $this->index,
-                'type' => 'command-bus',
+                'type' => $type,
                 'body' => $body
             ]);
+
+            unset($this->persists[$key]);
         }
     }
 }

@@ -24,16 +24,24 @@
             <!-- Exclude directory and file -->
 
             <exclude>
+
+                <!-- Exclude because in directory there are only files DI -->
+
                 <directory>./Exception</directory>
                 <directory>./Command</directory>
-                <directory>./Handler</directory>
                 <directory>./Entity</directory>
                 <directory>./vendor</directory>
+                <directory>./Query</directory>
                 <directory>./Tests</directory>
                 <directory>./Repository</directory>
+
+                <!-- Exclude because files is DI -->
+
                 <file>./DependencyInjection/CommandBusSymfonyExtension.php</file>
                 <file>./DependencyInjection/Configuration.php</file>
                 <file>./CommandBusSymfonyBundle.php</file>
+                <file>./Factory/CreateInfoFactory.php</file>
+
             </exclude>
         </whitelist>
     </filter>

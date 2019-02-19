@@ -9,13 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Ferdyrurka\CommandBus\Test\Util\ElasticSearch;
+namespace Ferdyrurka\CommandBus\Test\Connection\ElasticSearch;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Ferdyrurka\CommandBus\DependencyInjection\Database\ElasticSearchDatabase;
 use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
-use Ferdyrurka\CommandBus\Util\ElasticSearch\ElasticSearchConnection;
+use Ferdyrurka\CommandBus\Connection\ElasticSearch\ElasticSearchConnection;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -176,4 +176,3 @@ class ElasticSearchConnectionTest extends TestCase
         $this->assertInstanceOf(Client::class, $elasticSearchConnection->getClient());
     }
 }
-
