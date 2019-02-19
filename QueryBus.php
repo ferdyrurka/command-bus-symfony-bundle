@@ -77,7 +77,7 @@ class QueryBus implements QueryBusInterface
     protected function getQueryHandlerFromCommand(string $queryNamespace) : QueryHandlerInterface
     {
         $handlerNamespace = str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_query_command_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
             $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
             $queryNamespace
         );

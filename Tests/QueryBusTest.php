@@ -162,7 +162,7 @@ class QueryBusTest extends TestCase
         $this->container->shouldReceive('has')->once()->withArgs([$this->handlerNamespace])->andReturn($has);
         $this->container->shouldReceive('getParameter')->times(2)->withArgs(
             function (string $key): bool {
-                if ($key !== Parameters::PREFIX . '_query_command_prefix' &&
+                if ($key !== Parameters::PREFIX . '_query_prefix' &&
                     $key !== Parameters::PREFIX . '_query_handler_prefix'
                 ) {
                     return false;
