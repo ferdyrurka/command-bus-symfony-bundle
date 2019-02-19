@@ -41,11 +41,11 @@ class Configuration implements ConfigurationInterface
                     ->end()
 
                 ->scalarNode('query_handler_prefix')
-                    ->defaultValue('Handler')
+                    ->defaultValue('QueryHandler')
                     ->end()
 
                 ->scalarNode('query_prefix')
-                    ->defaultValue('Command')
+                    ->defaultValue('Query')
                     ->end()
 
                 ->booleanNode('save_command_bus_log')
