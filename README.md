@@ -13,6 +13,7 @@ This open-source package is ready to development for CQRS and DDD.
 
 [![Build Status](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle.svg?branch=master)](https://travis-ci.org/ferdyrurka/command-bus-symfony-bundle)
 [![Coverage Status](https://coveralls.io/repos/github/ferdyrurka/command-bus-symfony-bundle/badge.svg?branch=master)](https://coveralls.io/github/ferdyrurka/command-bus-symfony-bundle?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ferdyrurka/command-bus-symfony-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ferdyrurka/command-bus-symfony-bundle/?branch=master)
 
 ## Documentation
 
