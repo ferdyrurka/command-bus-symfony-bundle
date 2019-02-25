@@ -18,6 +18,7 @@ use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
+use Ferdyrurka\CommandBus\Util\NamespaceParser;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
 use \Exception;
@@ -42,9 +43,16 @@ class CommandBusTest extends TestCase
     private $handler;
 
     /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
      * @var string
      */
     private $handlerNamespace;
+
+    private $commandBus;
 
     /**
      *
@@ -53,15 +61,18 @@ class CommandBusTest extends TestCase
     {
         $this->command = Mockery::mock(CommandInterface::class);
         $this->handler = Mockery::mock(HandlerInterface::class);
+        $this->container = Mockery::mock(ContainerInterface::class);
+        $this->commandBus = new CommandBus($this->container);
 
-        $this->handlerNamespace = str_replace('Command', 'Handler', \get_class($this->command));
+        $namespaceParser = new NamespaceParser(\get_class($this->command), 'Command', 'Handler');
+        $this->handlerNamespace = $namespaceParser->getHandlerNamespaceByCommandNamespace();
     }
 
     /**
      * @throws Exception
      * @runInSeparateProcess
      */
-    public function testHandle(): void
+    public function testHandleException(): void
     {
         $logHandler = Mockery::mock(CreateLogHandler::class);
         $logHandler->shouldReceive('handle')->once()->withArgs([CreateLogCommand::class]);
@@ -69,24 +80,19 @@ class CommandBusTest extends TestCase
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
             ->andThrow(new Exception('Handle EXCEPTION'));
 
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->andReturn($this->handler, $logHandler)->times(2);
-
-        $container->shouldReceive('getParameter')
+        $this->setContainer(true);
+        $this->container->shouldReceive('get')->andReturn($this->handler, $logHandler)->times(2);
+        $this->container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
-                        Parameters::PREFIX . '_handler_prefix' !== $key &&
-                        Parameters::PREFIX . '_save_command_bus_log' !== $key
-                    ) {
+                    if (Parameters::PREFIX . '_save_command_bus_log' !== $key) {
                         return false;
                     }
 
                     return true;
                 }
             )
-            ->times(3)->andReturn('Command', 'Handler', true)
+            ->once()->andReturn(true)
         ;
 
         $createLogCommand = Mockery::mock('overload:' . CreateLogCommand::class, CommandInterface::class);
@@ -105,120 +111,133 @@ class CommandBusTest extends TestCase
             }
         );
 
-        $commandBus = new CommandBus($container);
-
         $this->expectException(Exception::class);
-        $commandBus->handle($this->command);
+        $this->commandBus->handle($this->command);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testNoSaveData(): void
     {
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class])
             ->andThrow(new Exception('Handle EXCEPTION'));
 
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
-        $container->shouldReceive('getParameter')
+        $this->setContainer(true);
+        $this->container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
+        $this->container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
-                        Parameters::PREFIX . '_handler_prefix' !== $key &&
-                        Parameters::PREFIX . '_save_command_bus_log' !== $key
-                    ) {
+                    if (Parameters::PREFIX . '_save_command_bus_log' !== $key) {
                         return false;
                     }
 
                     return true;
                 }
             )
-            ->times(3)->andReturn('Command', 'Handler', false)
+            ->once()->andReturn(false)
         ;
 
-        $commandBus = new CommandBus($container);
-
         $this->expectException(Exception::class);
-        $commandBus->handle($this->command);
+        $this->commandBus->handle($this->command);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testNotException(): void
     {
         $this->handler->shouldReceive('handle')->once()->withArgs([CommandInterface::class]);
 
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
-        $container->shouldReceive('getParameter')
-            ->withArgs(
-                function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
-                        Parameters::PREFIX . '_handler_prefix' !== $key
-                    ) {
-                        return false;
-                    }
+        $this->container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
+        $this->setContainer(true);
 
-                    return true;
-                }
-            )
-            ->times(2)->andReturn('Command', 'Handler')
-        ;
-
-        $commandBus = new CommandBus($container);
-        $commandBus->handle($this->command);
+        $this->commandBus->handle($this->command);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testHandleNotFoundException(): void
     {
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(false)->once();
-        $container->shouldReceive('getParameter')
+        $this->setContainer(false);
+        $this->container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
-                        Parameters::PREFIX . '_handler_prefix' !== $key &&
-                        Parameters::PREFIX . '_save_command_bus_log' !== $key
-                    ) {
+                    if (Parameters::PREFIX . '_save_command_bus_log' !== $key) {
                         return false;
                     }
 
                     return true;
                 }
             )
-            ->times(3)->andReturn('Command', 'Handler', false)
+            ->once()->andReturn(false)
         ;
 
-        $commandBus = new CommandBus($container);
-
         $this->expectException(HandlerNotFoundException::class);
-        $commandBus->handle($this->command);
+        $this->commandBus->handle($this->command);
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function testHandlerNotImplementsInterface(): void
     {
-        $container = Mockery::mock(ContainerInterface::class);
-        $container->shouldReceive('has')->withArgs([$this->handlerNamespace])->andReturn(true)->once();
-        $container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->command)->once();
-        $container->shouldReceive('getParameter')
+        $this->setContainer(true);
+        $this->container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->command)->once();
+        $this->container->shouldReceive('getParameter')
             ->withArgs(
                 function (string $key): bool {
-                    if (Parameters::PREFIX . '_command_prefix' !== $key &&
-                        Parameters::PREFIX . '_handler_prefix' !== $key &&
-                        Parameters::PREFIX . '_save_command_bus_log' !== $key
-                    ) {
+                    if (Parameters::PREFIX . '_save_command_bus_log' !== $key) {
                         return false;
                     }
 
                     return true;
                 }
             )
-            ->times(3)->andReturn('Command', 'Handler', false)
+            ->once()->andReturn(false)
         ;
 
-        $commandBus = new CommandBus($container);
-
         $this->expectException(HandlerNotFoundException::class);
-        $commandBus->handle($this->command);
+        $this->commandBus->handle($this->command);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHandleOkWithReplaceOnlyNameClass(): void
+    {
+        $namespaceParser = new NamespaceParser(\get_class($this->command), 'Command', 'Handler');
+        $this->handlerNamespace = $namespaceParser->getHandlerNamespaceByNameClass();
+
+        $this->handler->shouldReceive('handle')->once();
+
+        $this->setContainer(true, true);
+        $this->container->shouldReceive('get')->withArgs([$this->handlerNamespace])->andReturn($this->handler)->once();
+
+        $this->commandBus->handle($this->command);
+    }
+
+    /**
+     * @param bool $has
+     * @param bool $replaceCommandNamespace
+     */
+    private function setContainer(bool $has, bool $replaceCommandNamespace = false): void
+    {
+        $this->container->shouldReceive('has')->once()->withArgs([$this->handlerNamespace])->andReturn($has);
+        $this->container->shouldReceive('getParameter')->times(3)->withArgs(
+            function (string $key): bool {
+                if ($key !== Parameters::PREFIX . '_command_prefix' &&
+                    $key !== Parameters::PREFIX . '_handler_prefix' &&
+                    $key !== Parameters::PREFIX . '_replace_command_namespace'
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+        )->andReturn('Command', 'Handler', $replaceCommandNamespace)
+        ;
     }
 }
-
