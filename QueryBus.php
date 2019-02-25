@@ -76,11 +76,11 @@ class QueryBus implements QueryBusInterface
      */
     protected function getQueryHandlerFromCommand(string $queryNamespace) : QueryHandlerInterface
     {
-        $handlerNamespace = str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
-            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
-            $queryNamespace
-        );
+        if ((bool) $this->container->getParameter(Parameters::PREFIX . '_replace_query_namespace')) {
+            $handlerNamespace = $this->getHandlerNamespaceByNameClass($queryNamespace);
+        } else {
+            $handlerNamespace = $this->getHandlerNamespaceByQueryNamespace($queryNamespace);
+        }
 
         if (!$this->container->has($handlerNamespace)) {
             throw new QueryHandlerNotFoundException('Query Handler not found by namespace: ' . $handlerNamespace);
@@ -120,5 +120,28 @@ class QueryBus implements QueryBusInterface
 
         $createLogHandler = $this->container->get(CreateLogHandler::class);
         $createLogHandler->handle($createLogCommand);
+    }
+
+    protected function getHandlerNamespaceByNameClass(string $queryNamespace): string
+    {
+        $queryNamespaceArray = explode('//', $queryNamespace);
+        $queryName = end($queryNamespaceArray);
+
+        $queryHandlerName = str_replace(
+            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
+            $queryName
+        );
+
+        return str_replace($queryName, $queryHandlerName, $queryNamespace);
+    }
+
+    protected function getHandlerNamespaceByQueryNamespace(string $queryNamespace): string
+    {
+        return str_replace(
+            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
+            $queryNamespace
+        );
     }
 }

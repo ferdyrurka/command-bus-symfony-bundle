@@ -88,6 +88,9 @@ class QueryBusTest extends TestCase
         $this->queryBus->handle($this->query);
     }
 
+    /**
+     * @throws QueryHandlerNotFoundException
+     */
     public function testNotHasHandler(): void
     {
         $this->setContainer(false);
@@ -96,6 +99,9 @@ class QueryBusTest extends TestCase
         $this->queryBus->handle($this->query);
     }
 
+    /**
+     * @throws QueryHandlerNotFoundException
+     */
     public function testNotImplQueryHandler(): void
     {
         $this->setContainer(true);
@@ -157,20 +163,49 @@ class QueryBusTest extends TestCase
         $this->queryBus->handle($this->query);
     }
 
-    private function setContainer(bool $has): void
+    public function handleOkWithReplaceOnlyNameClass(): void
+    {
+        $queryNamespace = \get_class($this->query);
+        $queryNamespaceArray = explode('//', $queryNamespace);
+        $queryName = end($queryNamespaceArray);
+
+        $handlerNamespace = str_replace(
+            $queryName,
+            str_replace('Query', 'QueryHandler', $queryName),
+            $queryNamespace
+        );
+
+
+        $viewObject = Mockery::mock(ViewObjectInterface::class);
+        $this->handler->shouldReceive('handle')->withArgs([QueryInterface::class])
+            ->once()->andReturn($viewObject)
+        ;
+
+        $this->setContainer(true, true);
+        $this->container->shouldReceive('get')->once()->withArgs([$handlerNamespace])->andReturn($this->handler);
+
+        $this->queryBus->handle($this->query);
+    }
+
+    /**
+     * @param bool $has
+     * @param bool $replaceQueryNamespace
+     */
+    private function setContainer(bool $has, bool $replaceQueryNamespace = false): void
     {
         $this->container->shouldReceive('has')->once()->withArgs([$this->handlerNamespace])->andReturn($has);
-        $this->container->shouldReceive('getParameter')->times(2)->withArgs(
+        $this->container->shouldReceive('getParameter')->times(3)->withArgs(
             function (string $key): bool {
                 if ($key !== Parameters::PREFIX . '_query_prefix' &&
-                    $key !== Parameters::PREFIX . '_query_handler_prefix'
+                    $key !== Parameters::PREFIX . '_query_handler_prefix' &&
+                    $key !== Parameters::PREFIX . '_replace_query_namespace'
                 ) {
                     return false;
                 }
 
                 return true;
             }
-        )->andReturn('Query', 'QueryHandler')
+        )->andReturn($replaceQueryNamespace, 'Query', 'QueryHandler')
         ;
     }
 }
