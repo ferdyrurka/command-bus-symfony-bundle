@@ -19,6 +19,7 @@ use Ferdyrurka\CommandBus\Query\Handler\QueryHandlerInterface;
 use Ferdyrurka\CommandBus\Query\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 use Ferdyrurka\CommandBus\QueryBus;
+use Ferdyrurka\CommandBus\Util\NamespaceParser;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use \Mockery;
@@ -66,10 +67,10 @@ class QueryBusTest extends TestCase
         $this->query = Mockery::mock(QueryInterface::class);
         $this->handler = Mockery::mock(QueryHandlerInterface::class);
         $this->container = Mockery::mock(ContainerInterface::class);
-
-        $this->handlerNamespace = str_replace('Query', 'QueryHandler', \get_class($this->query));
-
         $this->queryBus = new QueryBus($this->container);
+
+        $namespaceParser = new NamespaceParser(\get_class($this->query), 'Query', 'QueryHandler');
+        $this->handlerNamespace = $namespaceParser->getHandlerNamespaceByCommandNamespace();
     }
 
     /**
@@ -166,18 +167,10 @@ class QueryBusTest extends TestCase
     /**
      * @throws QueryHandlerNotFoundException
      */
-    public function handleOkWithReplaceOnlyNameClass(): void
+    public function testHandleOkWithReplaceOnlyNameClass(): void
     {
-        $queryNamespace = \get_class($this->query);
-        $queryNamespaceArray = explode('//', $queryNamespace);
-        $queryName = end($queryNamespaceArray);
-
-        $handlerNamespace = str_replace(
-            $queryName,
-            str_replace('Query', 'QueryHandler', $queryName),
-            $queryNamespace
-        );
-
+        $namespaceParser = new NamespaceParser(\get_class($this->query), 'Query', 'QueryHandler');
+        $this->handlerNamespace = $namespaceParser->getHandlerNamespaceByNameClass();
 
         $viewObject = Mockery::mock(ViewObjectInterface::class);
         $this->handler->shouldReceive('handle')->withArgs([QueryInterface::class])
@@ -185,7 +178,7 @@ class QueryBusTest extends TestCase
         ;
 
         $this->setContainer(true, true);
-        $this->container->shouldReceive('get')->once()->withArgs([$handlerNamespace])->andReturn($this->handler);
+        $this->container->shouldReceive('get')->once()->withArgs([$this->handlerNamespace])->andReturn($this->handler);
 
         $this->queryBus->handle($this->query);
     }
@@ -208,7 +201,7 @@ class QueryBusTest extends TestCase
 
                 return true;
             }
-        )->andReturn($replaceQueryNamespace, 'Query', 'QueryHandler')
+        )->andReturn('Query', 'QueryHandler', $replaceQueryNamespace)
         ;
     }
 }

@@ -19,6 +19,7 @@ use Ferdyrurka\CommandBus\Query\Handler\QueryHandlerInterface;
 use Ferdyrurka\CommandBus\Query\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 use \Exception;
+use Ferdyrurka\CommandBus\Util\NamespaceParser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -76,10 +77,16 @@ class QueryBus implements QueryBusInterface
      */
     protected function getQueryHandlerFromCommand(string $queryNamespace) : QueryHandlerInterface
     {
+        $namespaceParser = new NamespaceParser(
+            $queryNamespace,
+            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
+            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix')
+        );
+
         if ((bool) $this->container->getParameter(Parameters::PREFIX . '_replace_query_namespace')) {
-            $handlerNamespace = $this->getHandlerNamespaceByNameClass($queryNamespace);
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByNameClass();
         } else {
-            $handlerNamespace = $this->getHandlerNamespaceByQueryNamespace($queryNamespace);
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByCommandNamespace();
         }
 
         if (!$this->container->has($handlerNamespace)) {
@@ -120,36 +127,5 @@ class QueryBus implements QueryBusInterface
 
         $createLogHandler = $this->container->get(CreateLogHandler::class);
         $createLogHandler->handle($createLogCommand);
-    }
-
-    /**
-     * @param string $queryNamespace
-     * @return string
-     */
-    protected function getHandlerNamespaceByNameClass(string $queryNamespace): string
-    {
-        $queryNamespaceArray = explode('//', $queryNamespace);
-        $queryName = end($queryNamespaceArray);
-
-        $queryHandlerName = str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
-            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
-            $queryName
-        );
-
-        return str_replace($queryName, $queryHandlerName, $queryNamespace);
-    }
-
-    /**
-     * @param string $queryNamespace
-     * @return string
-     */
-    protected function getHandlerNamespaceByQueryNamespace(string $queryNamespace): string
-    {
-        return str_replace(
-            $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
-            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
-            $queryNamespace
-        );
     }
 }
