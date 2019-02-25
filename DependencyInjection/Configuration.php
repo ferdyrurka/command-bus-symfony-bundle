@@ -32,20 +32,28 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
 
-                ->scalarNode('handler_prefix')
+                ->arrayNode('handler_prefix')
                     ->defaultValue('Handler')
                     ->end()
 
-                ->scalarNode('command_prefix')
+                ->arrayNode('command_prefix')
                     ->defaultValue('Command')
                     ->end()
 
-                ->scalarNode('query_handler_prefix')
+                ->booleanNode('replace_command_namespace')
+                    ->defaultFalse()
+                    ->end()
+
+                ->arrayNode('query_handler_prefix')
                     ->defaultValue('QueryHandler')
                     ->end()
 
-                ->scalarNode('query_prefix')
+                ->arrayNode('query_prefix')
                     ->defaultValue('Query')
+                    ->end()
+
+                ->booleanNode('replace_query_namespace')
+                    ->defaultFalse()
                     ->end()
 
                 ->booleanNode('save_command_bus_log')

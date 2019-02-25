@@ -23,6 +23,11 @@ command_bus_symfony:
         # Is required
     command_prefix: 'your_command_prefix'
     
+        # Replace only name class
+        # Handler and Command is in one folder 
+    
+    replace_command_namespace: false
+    
         # Default: Command
         # Is required
     query_prefix: 'your_query_prefix'
@@ -31,6 +36,11 @@ command_bus_symfony:
         # Is required
     query_handler_prefix: 'your_query_handler_prefix'
   
+        # Replace only name class
+        # Handler and Command is in one folder
+    
+    replace_query_namespace: false
+    
     # Do you want to save data from the execution of the trader
     
     # Save only all throws
