@@ -78,6 +78,11 @@ class Parameters
             $this->configs['save_command_bus_log']
         );
 
+        $this->containerBuilder->setParameter(
+            self::PREFIX . '_replace_command_namespace',
+            $this->configs['replace_command_namespace']
+        );
+
         # QueryBus
 
         $this->containerBuilder->setParameter(
@@ -89,6 +94,11 @@ class Parameters
         $this->containerBuilder->setParameter(
             self::PREFIX . '_save_query_bus_log',
             $this->configs['save_query_bus_log']
+        );
+
+        $this->containerBuilder->setParameter(
+            self::PREFIX . '_replace_query_namespace',
+            $this->configs['replace_query_namespace']
         );
     }
 
