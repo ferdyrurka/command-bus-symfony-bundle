@@ -122,6 +122,10 @@ class QueryBus implements QueryBusInterface
         $createLogHandler->handle($createLogCommand);
     }
 
+    /**
+     * @param string $queryNamespace
+     * @return string
+     */
     protected function getHandlerNamespaceByNameClass(string $queryNamespace): string
     {
         $queryNamespaceArray = explode('//', $queryNamespace);
@@ -136,6 +140,10 @@ class QueryBus implements QueryBusInterface
         return str_replace($queryName, $queryHandlerName, $queryNamespace);
     }
 
+    /**
+     * @param string $queryNamespace
+     * @return string
+     */
     protected function getHandlerNamespaceByQueryNamespace(string $queryNamespace): string
     {
         return str_replace(

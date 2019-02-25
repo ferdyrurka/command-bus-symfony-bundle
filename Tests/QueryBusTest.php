@@ -163,6 +163,9 @@ class QueryBusTest extends TestCase
         $this->queryBus->handle($this->query);
     }
 
+    /**
+     * @throws QueryHandlerNotFoundException
+     */
     public function handleOkWithReplaceOnlyNameClass(): void
     {
         $queryNamespace = \get_class($this->query);
