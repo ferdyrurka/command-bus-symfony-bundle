@@ -28,11 +28,11 @@ command_bus_symfony:
     
     replace_command_namespace: false
     
-        # Default: Command
+        # Default: Query
         # Is required
     query_prefix: 'your_query_prefix'
   
-        # Default: Command
+        # Default: QueryHandler
         # Is required
     query_handler_prefix: 'your_query_handler_prefix'
   
