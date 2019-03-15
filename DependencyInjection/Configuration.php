@@ -32,11 +32,11 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
 
-                ->arrayNode('handler_prefix')
-                    ->defaultValue('Handler')
+                ->scalarNode('handler_prefix')
+                    ->defaultValue('CommandHandler')
                     ->end()
 
-                ->arrayNode('command_prefix')
+                ->scalarNode('command_prefix')
                     ->defaultValue('Command')
                     ->end()
 
@@ -44,11 +44,11 @@ class Configuration implements ConfigurationInterface
                     ->defaultFalse()
                     ->end()
 
-                ->arrayNode('query_handler_prefix')
+                ->scalarNode('query_handler_prefix')
                     ->defaultValue('QueryHandler')
                     ->end()
 
-                ->arrayNode('query_prefix')
+                ->scalarNode('query_prefix')
                     ->defaultValue('Query')
                     ->end()
 

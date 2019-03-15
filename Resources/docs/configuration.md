@@ -15,7 +15,7 @@ command_bus_symfony:
 
     #### CommandBus
     
-        # Default: Handler
+        # Default: CommandHandler
         # Is required
     handler_prefix: 'your_handler_prefix'
       
