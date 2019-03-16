@@ -33,11 +33,15 @@ class Configuration implements ConfigurationInterface
             ->children()
 
                 ->scalarNode('handler_prefix')
-                    ->defaultValue('Handler')
+                    ->defaultValue('CommandHandler')
                     ->end()
 
                 ->scalarNode('command_prefix')
                     ->defaultValue('Command')
+                    ->end()
+
+                ->booleanNode('replace_command_namespace')
+                    ->defaultFalse()
                     ->end()
 
                 ->scalarNode('query_handler_prefix')
@@ -46,6 +50,10 @@ class Configuration implements ConfigurationInterface
 
                 ->scalarNode('query_prefix')
                     ->defaultValue('Query')
+                    ->end()
+
+                ->booleanNode('replace_query_namespace')
+                    ->defaultFalse()
                     ->end()
 
                 ->booleanNode('save_command_bus_log')

@@ -17,6 +17,7 @@ use Ferdyrurka\CommandBus\DependencyInjection\Parameters;
 use Ferdyrurka\CommandBus\Exception\HandlerNotFoundException;
 use Ferdyrurka\CommandBus\Handler\CreateLogHandler;
 use Ferdyrurka\CommandBus\Handler\HandlerInterface;
+use Ferdyrurka\CommandBus\Util\NamespaceParser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Exception;
 
@@ -70,11 +71,17 @@ class CommandBus implements CommandBusInterface
      */
     protected function getHandleFromCommand(string $commandNamespace): HandlerInterface
     {
-        $handlerNamespace = str_replace(
+        $namespaceParser = new NamespaceParser(
+            $commandNamespace,
             $this->container->getParameter(Parameters::PREFIX . '_command_prefix'),
-            $this->container->getParameter(Parameters::PREFIX . '_handler_prefix'),
-            $commandNamespace
+            $this->container->getParameter(Parameters::PREFIX . '_handler_prefix')
         );
+
+        if ((bool) $this->container->getParameter(Parameters::PREFIX . '_replace_command_namespace')) {
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByNameClass();
+        } else {
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByCommandNamespace();
+        }
 
         if (!$this->container->has($handlerNamespace)) {
             throw new HandlerNotFoundException('Handler not found by namespace: ' . $handlerNamespace);

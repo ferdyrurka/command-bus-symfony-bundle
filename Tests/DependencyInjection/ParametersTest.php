@@ -50,6 +50,8 @@ class ParametersTest extends TestCase
             'query_prefix' => 'Query',
             'save_command_bus_log' => false,
             'save_query_bus_log' => false,
+            'replace_query_namespace' => true,
+            'replace_command_namespace' => true,
             'database_type' => 'elasticsearch',
             'connection' => [
                 'elasticsearch' => []
@@ -117,15 +119,17 @@ class ParametersTest extends TestCase
      */
     private function setContainerToRequiredParam(): void
     {
-        $this->containerBuilder->shouldReceive('setParameter')->times(6)
+        $this->containerBuilder->shouldReceive('setParameter')->times(8)
             ->withArgs(
                 function (string $key, $value) {
                     $prefix = Parameters::PREFIX;
 
                     if ($key !== $prefix . '_handler_prefix' &&
                         $key !== $prefix . '_command_prefix' &&
+                        $key !== $prefix . '_replace_command_namespace' &&
                         $key !== $prefix . '_query_handler_prefix' &&
                         $key !== $prefix . '_query_prefix' &&
+                        $key !== $prefix . '_replace_query_namespace' &&
                         $key !== $prefix . '_save_command_bus_log' &&
                         $key !== $prefix . '_save_query_bus_log'
                     ) {
@@ -134,8 +138,10 @@ class ParametersTest extends TestCase
 
                     if ($value !== $this->config['handler_prefix'] &&
                         $value !== $this->config['command_prefix'] &&
+                        $value !== $this->config['replace_command_namespace'] &&
                         $value !== $this->config['query_handler_prefix'] &&
                         $value !== $this->config['query_prefix'] &&
+                        $value !== $this->config['replace_query_namespace'] &&
                         $value !== $this->config['save_command_bus_log'] &&
                         $value !== $this->config['save_query_bus_log']
                     ) {

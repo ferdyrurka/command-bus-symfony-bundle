@@ -19,6 +19,7 @@ use Ferdyrurka\CommandBus\Query\Handler\QueryHandlerInterface;
 use Ferdyrurka\CommandBus\Query\QueryInterface;
 use Ferdyrurka\CommandBus\Query\ViewObject\ViewObjectInterface;
 use \Exception;
+use Ferdyrurka\CommandBus\Util\NamespaceParser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -76,11 +77,17 @@ class QueryBus implements QueryBusInterface
      */
     protected function getQueryHandlerFromCommand(string $queryNamespace) : QueryHandlerInterface
     {
-        $handlerNamespace = str_replace(
+        $namespaceParser = new NamespaceParser(
+            $queryNamespace,
             $this->container->getParameter(Parameters::PREFIX . '_query_prefix'),
-            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix'),
-            $queryNamespace
+            $this->container->getParameter(Parameters::PREFIX . '_query_handler_prefix')
         );
+
+        if ((bool) $this->container->getParameter(Parameters::PREFIX . '_replace_query_namespace')) {
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByNameClass();
+        } else {
+            $handlerNamespace = $namespaceParser->getHandlerNamespaceByCommandNamespace();
+        }
 
         if (!$this->container->has($handlerNamespace)) {
             throw new QueryHandlerNotFoundException('Query Handler not found by namespace: ' . $handlerNamespace);
