@@ -32,13 +32,6 @@ Documentation for CommandBus is in [click here](Resources/docs/index.md)
 php vendor/bin/phpunit
 ```
 
-## Soon
-
-* New database (Staff Doctrine2)
-* QueryBus
-* EventBus
-* Safe your data. Not worked MySQL, added command to queue and waited to save.
-
 ## FAQ
 
 * Why not use Monolog?
